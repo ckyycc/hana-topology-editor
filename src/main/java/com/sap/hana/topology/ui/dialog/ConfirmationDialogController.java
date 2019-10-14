@@ -11,16 +11,12 @@ import javafx.scene.input.KeyEvent;
 public class ConfirmationDialogController extends DialogController<ButtonType> {
     @FXML
     private JFXButton btnCancel;
-
     @FXML
     private Label lbTitle;
-
     @FXML
     private Label lbContent1;
-
     @FXML
     private Label lbContent2;
-
     @FXML
     private void onCancel(ActionEvent event) {
         accept(ButtonType.CANCEL);
@@ -54,12 +50,26 @@ public class ConfirmationDialogController extends DialogController<ButtonType> {
         btnCancel.requestFocus();
     }
 
+    /**
+     * Set title for the confirmation dialog
+     * @param title title of the dialog
+     */
     public void setTitle(String title) {
         lbTitle.setText(title);
     }
+
+    /**
+     * Set the part 1 content
+     * @param content part 1 content
+     */
     public void setContent1(String content) {
         lbContent1.setText(content);
     }
+
+    /**
+     * Set the part 2 content (highlighted)
+     * @param content part 2 content
+     */
     public void setContent2(String content) {
         lbContent2.setText(content);
     }

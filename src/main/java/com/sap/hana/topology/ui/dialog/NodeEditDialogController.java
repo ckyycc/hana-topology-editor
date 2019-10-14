@@ -18,19 +18,14 @@ import java.util.Map;
 public class NodeEditDialogController extends DialogController<Map<String, String>> {
     @FXML
     private JFXTextField txtName;
-
     @FXML
     private JFXTextField txtValue;
-
     @FXML
     private JFXButton btnOK;
-
     @FXML
     private JFXButton btnCancel;
-
     @FXML
     private JFXToggleButton tbLeaf;
-
     @FXML
     private Label lbParentPath;
 
@@ -72,24 +67,44 @@ public class NodeEditDialogController extends DialogController<Map<String, Strin
         tbLeaf.disableProperty().bind(editFlag);
     }
 
+    /**
+     * Set parent path to path label
+     * @param path path of parent node
+     */
     public void setParentPath(String path) {
         lbParentPath.setText(path);
     }
 
+    /**
+     * Set the leaf flag, indicating whether current node is leaf node or not.
+     * @param isLeaf leaf flag
+     */
     public void setLeaf(boolean isLeaf) {
         tbLeaf.setSelected(isLeaf);
     }
 
+    /**
+     * Set node name to the name text field
+     * @param name name of the node
+     */
     public void setName(String name) {
         txtName.setText(name == null ? "" : name);
         nameEqualFlag.bind(txtName.textProperty().isEqualTo(txtName.getText()));
     }
 
+    /**
+     * Set node value to the value text field
+     * @param value value of the node
+     */
     public void setValue(String value) {
         txtValue.setText(value == null ? "" : value);
         valueEqualFlag.bind(txtValue.textProperty().isEqualTo(txtValue.getText()));
     }
 
+    /**
+     * Set the edit flag, indicating whether this dialog is for editing or inserting
+     * @param editFlag edit flag
+     */
     public void setEditFlag(boolean editFlag) {
         this.editFlag.setValue(!editFlag);
     }

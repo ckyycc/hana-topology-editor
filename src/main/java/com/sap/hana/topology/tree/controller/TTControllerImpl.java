@@ -106,15 +106,16 @@ public class TTControllerImpl implements TTController {
     /**
      * Register all the processors
      */
-    @SuppressWarnings({"UnstableApiUsage", "unchecked"})
     private static void register() throws TTException {
 
         try {
             //get class path
+            @SuppressWarnings("UnstableApiUsage") //the ClassPath has beta flag (guava)
             ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
             //Get the package of processor
             String packageName = TTProcessor.class.getPackage().getName();
             //get all classes in the package
+            @SuppressWarnings("UnstableApiUsage") //the ClassPath has beta flag (guava)
             ImmutableSet<ClassPath.ClassInfo> classes = classPath.getTopLevelClassesRecursive(packageName);
             //get all classes full name
             Collection<String> classNames = Collections2.transform(classes, classInfo -> classInfo != null ? classInfo.getName() : null);
@@ -129,11 +130,12 @@ public class TTControllerImpl implements TTController {
                     Processor processorAnnotation = clazz.getAnnotation(Processor.class);
                     if (processorAnnotation.processorType() == ProcessorType.IMPORT) {
 //                      Class<? extends TTProcessor<String, TopologyTreeNode>> c = Class.forName(name).asSubclass(TTFsidImpProcessor.class);
-//                      registerImpProcessor(c.getConstructor().newInstance());
+                        @SuppressWarnings("unchecked")
                         Class<TTProcessor<String, TTNode>> importProcessor = (Class<TTProcessor<String, TTNode>>) clazz;
                         registerImpProcessor(importProcessor.getConstructor().newInstance());
 
                     } else if (processorAnnotation.processorType() == ProcessorType.EXPORT) {
+                        @SuppressWarnings("unchecked")
                         Class<TTProcessor<TTNode, String>> exportProcessor = (Class<TTProcessor<TTNode, String>>) clazz;
                         registerExpProcessor(exportProcessor.getConstructor().newInstance());
 
