@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane onKeyPressed="#onKeyPressed" prefHeight="220.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sap.hana.tools.topology.ui.dialog.NodeEditDialogController">
+<StackPane onKeyPressed="#onKeyPressed" prefHeight="220.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sap.hana.topology.ui.dialog.NodeEditDialogController">
     <Pane style="-fx-background-color: white;">
         <JFXTextField fx:id="txtName" layoutX="35.0" layoutY="105.0" prefHeight="27.0" prefWidth="170.0" promptText="Name" />
         <JFXTextField fx:id="txtValue" layoutX="240.0" layoutY="105.0" prefHeight="27.0" prefWidth="170.0" promptText="Value" />

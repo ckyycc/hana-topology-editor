@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane onKeyPressed="#onKeyPressed" prefHeight="220.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sap.hana.tools.topology.ui.dialog.AboutDialogController">
+<StackPane onKeyPressed="#onKeyPressed" prefHeight="220.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sap.hana.topology.ui.dialog.AboutDialogController">
     <Pane style="-fx-background-color: white;">
         <JFXButton fx:id="btnOK" layoutX="330.0" layoutY="170.0" onAction="#onOK" prefHeight="27.0" prefWidth="80.0" styleClass="btn-raised" text="OK" />
         <Label layoutX="35.0" layoutY="24.0" maxWidth="288.0" styleClass="lb-about-title" text="HANA Topology Editor">
