@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane onKeyPressed="#onKeyPressed" prefHeight="220.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sap.hana.tools.topology.ui.dialog.NodeEditDialogController">
+    <Pane style="-fx-background-color: white;">
+        <JFXTextField fx:id="txtName" layoutX="35.0" layoutY="105.0" prefHeight="27.0" prefWidth="170.0" promptText="Name" />
+        <JFXTextField fx:id="txtValue" layoutX="240.0" layoutY="105.0" prefHeight="27.0" prefWidth="170.0" promptText="Value" />
+        <JFXButton fx:id="btnOK" layoutX="240.0" layoutY="170.0" onAction="#onOK" prefHeight="27.0" prefWidth="80.0" styleClass="btn-raised" text="OK" />
+        <JFXButton fx:id="btnCancel" layoutX="330.0" layoutY="170.0" onAction="#onCancel" prefHeight="27.0" prefWidth="80.0" styleClass="btn-raised" text="Cancel" />
+        <JFXToggleButton fx:id="tbLeaf" layoutX="322.0" layoutY="2.0" maxWidth="236.0" prefHeight="61.0" prefWidth="99.0" text="Leaf" />
+        <Label fx:id="lbParentPath" layoutX="35.0" layoutY="24.0" maxWidth="288.0" />
+      <Separator layoutX="35.0" layoutY="57.0" prefWidth="375.0" />
+        <effect>
+            <DropShadow blurType="GAUSSIAN" />
+        </effect>
+    </Pane>
+</StackPane>

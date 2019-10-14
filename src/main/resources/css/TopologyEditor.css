@@ -1,0 +1,180 @@
+@import url("Root.css");
+/* tree view */
+.tv-topology {
+    -fx-background-color: -fx-tv-background;
+    -fx-text-fill: -fx-tv-text-dark;
+    -fx-font-size: 12px;
+
+}
+
+.tv-topology .tree-cell: selected {
+    -fx-background-color: -fx-tv-tree-selected-color;
+    -fx-text-fill: -fx-tv-text-light;
+}
+
+.lb-leaf-name {
+    -fx-text-fill: -fx-tv-leaf-name-color;
+    -fx-padding: 0 2 0 0;
+    -fx-font-size: 11px;
+}
+
+.lb-leaf-value {
+    -fx-text-fill: -fx-tv-leaf-value-color;
+    -fx-padding: 0 0 0 2;
+    -fx-font-size: 11px;
+}
+
+.icon-leaf-name-value-delimiter {
+    -fx-text-fill: -fx-tv-text-dark;
+    -fx-font-size: 8px;
+}
+
+.tv-topology: ondrag {
+   -fx-background-color: -fx-tv-tree-drag-area-color;
+}
+
+
+/* tree view path */
+.jfx-tree-view-path, .jfx-tree-view-path:focused{
+    -jfx-offset: 5;
+    -fx-padding: -5 0 0 19;
+    -fx-background-color: -fx-tv-background;
+}
+
+.jfx-tree-view-path .buttons-container{
+    -fx-font-size: 11px;
+    -fx-pref-height: 20;
+}
+
+.buttons-container {
+    -fx-cursor: hand;
+}
+
+.tv-path-init-label {
+    -fx-padding: 5 0 0 5;
+    -fx-text-fill: -fx-tv-path-color;
+    -fx-font-size: 11px;
+}
+
+.tv-path-button {
+    -fx-focus-traversable: false;
+    -fx-text-fill: -fx-tv-path-color;
+}
+
+.jfx-svg-glyph {
+    -fx-background-color: -fx-tv-path-color;
+    -size: 4;
+    -fx-min-height: -size;
+    -fx-min-width: -size;
+    -fx-max-height: -size;
+    -fx-max-width: -size;
+}
+
+
+/* button */
+.btn-raised {
+    -fx-font-size: 12px;
+    /*-jfx-button-type: RAISED;*/
+    -fx-background-color: -fx-tv-main-color;
+    -fx-text-fill: -fx-tv-text-light;
+    -fx-cursor: hand;
+    -fx-alignment: center;
+}
+
+.btn-about {
+    -fx-background-color: white;
+    -fx-cursor: hand;
+    -fx-background-image: url('/img/icon.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain ;
+}
+
+.btn-about: hover {
+    -fx-cursor: hand;
+    -fx-background-color: -fx-button-hover-light;
+}
+
+/* input text - filter */
+.txt-filter {
+    -fx-font-size: 11px;
+    -fx-padding: 0 0 0 2;
+}
+
+/* input text - normal */
+.jfx-text-field {
+    -fx-font-size: 12px;
+    -jfx-label-float: true;
+    -jfx-focus-color: -fx-tv-main-color;
+    -fx-background-color: -fx-tv-background;
+}
+
+/* toggle button - normal */
+.jfx-toggle-button {
+    -fx-font-size: 12px;
+}
+
+/* label - confirmation */
+.lb-confirmation-title {
+    -fx-font-size: 16px;
+}
+
+.lb-confirmation-content1 {
+    -fx-font-size: 12px;
+}
+
+.lb-confirmation-content2 {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-confirm-dialog-highlight;
+}
+
+/* label - about */
+.lb-about-title {
+    -fx-font-size: 15px;
+}
+
+.lb-about-version .lb-about-author .hl-about-github{
+    -fx-font-size: 12px;
+}
+
+.lb-about-build {
+    -fx-font-size: 10px;
+}
+
+.iv-about-project {
+    -fx-image: url('/img/icon.png');
+}
+
+/* status bar */
+.jfx-snackbar-content {
+    -fx-background-color: -fx-tv-text-background;
+}
+
+.jfx-snackbar-toast {
+    -fx-font-size: 11px;
+    -fx-text-fill: -fx-tv-text-dark;
+    -fx-wrap-text: true;
+}
+
+.jfx-snackbar-toast: info {
+    -fx-text-fill: -fx-tv-text-info;
+}
+
+.jfx-snackbar-toast: warn {
+    -fx-text-fill: -fx-tv-text-warn;
+}
+
+.jfx-snackbar-toast: error {
+    -fx-text-fill: -fx-tv-text-error;
+}
+
+.jfx-snackbar-action {
+    -fx-text-fill: -fx-tv-text-action;
+    -fx-cursor: hand;
+    -fx-font-size: 11px;
+    -fx-focus-traversable: false;
+}
+.jfx-snackbar-action: hover {
+    -fx-text-fill: -fx-tv-text-action-hover;
+}
+
