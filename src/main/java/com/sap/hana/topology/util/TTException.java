@@ -1,4 +1,4 @@
-package com.sap.hana.topology.exception;
+package com.sap.hana.topology.util;
 
 public class TTException extends Exception {
     public TTException() {

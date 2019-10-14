@@ -1,6 +1,5 @@
 package com.sap.hana.topology.tree.processor;
 
-import com.sap.hana.topology.exception.TTProcessException;
 import com.sap.hana.topology.tree.TTNode;
 import com.sap.hana.topology.util.CommonUtils;
 import com.sap.hana.topology.util.FileUtils;

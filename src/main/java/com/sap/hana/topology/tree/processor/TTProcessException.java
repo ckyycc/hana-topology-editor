@@ -1,4 +1,6 @@
-package com.sap.hana.topology.exception;
+package com.sap.hana.topology.tree.processor;
+
+import com.sap.hana.topology.util.TTException;
 
 public class TTProcessException extends TTException {
     public TTProcessException() {

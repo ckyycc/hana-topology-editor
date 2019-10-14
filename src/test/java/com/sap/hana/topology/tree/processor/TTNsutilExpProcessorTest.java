@@ -1,7 +1,6 @@
 package com.sap.hana.topology.tree.processor;
 
-import com.sap.hana.topology.exception.TTException;
-import com.sap.hana.topology.exception.TTProcessException;
+import com.sap.hana.topology.util.TTException;
 import com.sap.hana.topology.tree.TTNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

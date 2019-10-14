@@ -3,7 +3,6 @@ package com.sap.hana.topology.util;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
-import com.sap.hana.topology.exception.TTException;
 import com.sap.hana.topology.tree.TTNode;
 import com.sap.hana.topology.ui.tree.FilterableTreeItem;
 import javafx.css.PseudoClass;

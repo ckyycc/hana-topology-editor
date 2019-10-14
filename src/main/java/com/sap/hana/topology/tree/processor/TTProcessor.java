@@ -1,7 +1,5 @@
 package com.sap.hana.topology.tree.processor;
 
-import com.sap.hana.topology.exception.TTProcessException;
-
 /**
  * Processor interface for topology tree
  * @param <T> parameter

@@ -3,7 +3,6 @@ package com.sap.hana.topology.tree.processor;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.sap.hana.topology.exception.TTProcessException;
 import com.sap.hana.topology.tree.TTNode;
 import com.sap.hana.topology.util.FileUtils;
 

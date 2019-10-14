@@ -1,7 +1,7 @@
 package com.sap.hana.topology.ui;
 
 import com.jfoenix.controls.*;
-import com.sap.hana.topology.exception.TTException;
+import com.sap.hana.topology.util.TTException;
 import com.sap.hana.topology.util.CommonUtils;
 import com.sap.hana.topology.util.Status;
 import com.sap.hana.topology.util.TreeUtils;

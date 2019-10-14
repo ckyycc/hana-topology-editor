@@ -1,6 +1,5 @@
 package com.sap.hana.topology.tree;
 
-import com.sap.hana.topology.exception.TTRTException;
 import com.sap.hana.topology.util.CommonUtils;
 
 import java.util.ArrayList;
@@ -208,7 +207,7 @@ public class TTNode {
      */
     public void addChild(TTNode child) {
         if (isLeaf) {
-            throw new TTRTException("Can not add child to a LEAF node.");
+            throw new RuntimeException("Can not add child to a LEAF node.");
         }
 
         if (CommonUtils.isNullOrEmpty(children)) {

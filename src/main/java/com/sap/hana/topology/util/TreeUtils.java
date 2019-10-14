@@ -1,6 +1,5 @@
 package com.sap.hana.topology.util;
 
-import com.sap.hana.topology.exception.TTException;
 import com.sap.hana.topology.tree.TTNode;
 
 /**

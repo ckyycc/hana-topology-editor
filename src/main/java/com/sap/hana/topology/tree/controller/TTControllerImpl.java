@@ -4,7 +4,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.ClassPath;
 import com.sap.hana.topology.tree.processor.Processor;
-import com.sap.hana.topology.exception.TTException;
+import com.sap.hana.topology.util.TTException;
 import com.sap.hana.topology.tree.processor.ProcessorType;
 import com.sap.hana.topology.util.FileUtils;
 import com.sap.hana.topology.util.TreeUtils;
