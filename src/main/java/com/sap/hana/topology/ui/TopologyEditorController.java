@@ -166,12 +166,17 @@ public class TopologyEditorController {
             lastFileFolder = savedFile.getParentFile();
 
             try {
-                if (savedFile.exists() && savedFile.delete() && savedFile.createNewFile()) {
+                if (savedFile.exists() && !savedFile.delete()) {
+                    showMsg("Failed to replace the file:" + savedFile.toString() + ", please check the related file access.", Status.ERROR);
+                    event.consume();
+                    return;
+                }
+                if (savedFile.createNewFile()) {
                     try (FileWriter writer = new FileWriter(savedFile)) {
                         writer.write(getController().exportTopology(this.topologyRootNode));
                     }
                 } else {
-                    showMsg("Something wrong happened during saving the file:" + savedFile.toString() + ", please check the related file access.", Status.ERROR);
+                    showMsg("Failed to save the file:" + savedFile.toString() + ", please check the related file access.", Status.ERROR);
                     event.consume();
                     return;
                 }
