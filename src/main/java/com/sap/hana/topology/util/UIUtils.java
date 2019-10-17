@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 /**
  * Utilities for UI
  */
-public class UIUtils {
+public final class UIUtils {
     /**
      * Key for getting HostServices object
      */
@@ -40,14 +40,16 @@ public class UIUtils {
      * @param topologyNode tree node from topology
      * @param treeViewMap map between treeNode of tree view and treeNode of topology.
      */
-    public static void buildTree (FilterableTreeItem<String> treeNode, TTNode topologyNode, Map<TreeItem<String>, TTNode> treeViewMap) throws TTException {
+    public static void buildTree (FilterableTreeItem<String> treeNode, TTNode<String> topologyNode, Map<TreeItem<String>, TTNode<String>> treeViewMap) throws TTException {
         //tree view map should be never null
         if (treeViewMap == null) {
             throw new TTException("Internal error occurred! The tree map is empty.");
         }
         //does nothing if related tree node is null
         if (topologyNode != null && treeNode != null) {
-            FilterableTreeItem<String> subNode = new FilterableTreeItem<>(topologyNode.getName());
+            //create tree item. For search purpose, set value to tree item if it is leaf node
+            FilterableTreeItem<String> subNode = new FilterableTreeItem<>(
+                    topologyNode.getValue() != null ? topologyNode.getName() + "/" + topologyNode.getValue() : topologyNode.getName());
 
             //update map
             treeViewMap.put(subNode, topologyNode);
@@ -59,7 +61,7 @@ public class UIUtils {
 
             treeNode.getInternalChildren().add(subNode);
             if (topologyNode.getChildren() != null && topologyNode.getChildren().size() > 0) {
-                for (TTNode node : topologyNode.getChildren())
+                for (TTNode<String> node : topologyNode.getChildren())
                     buildTree(subNode, node, treeViewMap);
             }
         }
@@ -70,7 +72,7 @@ public class UIUtils {
      * @param node tree node
      * @return the string value of the tree node
      */
-    public static String getTreeNodeValue4Display(TTNode node) {
+    public static String getTreeNodeValue4Display(TTNode<String> node) {
         return node.getName(); // only display name
     }
 
