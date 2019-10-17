@@ -1,25 +1,24 @@
 package com.sap.hana.topology.tree.controller;
 
-import com.sap.hana.topology.tree.processor.Processor;
-import com.sap.hana.topology.util.TTException;
-import com.sap.hana.topology.tree.processor.ProcessorType;
-import com.sap.hana.topology.util.FileUtils;
-import com.sap.hana.topology.util.TreeUtils;
 import com.sap.hana.topology.tree.TTNode;
+import com.sap.hana.topology.tree.processor.Processor;
+import com.sap.hana.topology.tree.processor.ProcessorType;
 import com.sap.hana.topology.tree.processor.TTProcessor;
-import io.github.classgraph.ScanResult;
-import io.github.classgraph.ClassGraph;
+import com.sap.hana.topology.util.CommonUtils;
+import com.sap.hana.topology.util.FileUtils;
+import com.sap.hana.topology.util.TTException;
+import com.sap.hana.topology.util.TreeUtils;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Controller implementation, it's singleton.
  */
-public class TTControllerImpl implements TTController {
+public final class TTControllerImpl implements TTController {
 
     /**
      * Load topology from topology string to topology tree node.
@@ -28,8 +27,8 @@ public class TTControllerImpl implements TTController {
      * @return topology tree root node
      * @throws TTException topology tree exception
      */
-    public TTNode loadTopology(String topologyStr) throws TTException {
-        TTProcessor<String, TTNode> processor = impProcessors.get(FileUtils.getFirstLineFromTopologyStr(topologyStr));
+    public TTNode<String> loadTopology(String topologyStr) throws TTException {
+        final TTProcessor<String, TTNode<String>> processor = impProcessors.get(FileUtils.getFirstLineFromTopologyStr(topologyStr));
 
         if (processor == null) {
             throw new TTException("File format is not supported!");
@@ -45,8 +44,8 @@ public class TTControllerImpl implements TTController {
      * @return topology string
      * @throws TTException topology tree exception
      */
-    public String exportTopology(TTNode topologyNode) throws TTException {
-        TTProcessor<TTNode, String> processor = expProcessors.get(TreeUtils.TOPOLOGY_TREE_EXPORTER_ID);
+    public String exportTopology(TTNode<String> topologyNode) throws TTException {
+        final TTProcessor<TTNode<String>, String> processor = expProcessors.get(TreeUtils.TOPOLOGY_TREE_EXPORTER_ID);
 
         if (processor == null) {
             throw new TTException("Internal error occurred!");
@@ -70,19 +69,19 @@ public class TTControllerImpl implements TTController {
     /**
      * import processor map
      */
-    private static Map<String, TTProcessor<String, TTNode>> impProcessors = new HashMap<>();
+    private static final Map<String, TTProcessor<String, TTNode<String>>> impProcessors = new HashMap<>();
 
     /**
      * export processor map
      */
-    private static Map<String, TTProcessor<TTNode, String>> expProcessors = new HashMap<>();
+    private static final Map<String, TTProcessor<TTNode<String>, String>> expProcessors = new HashMap<>();
 
     /**
      * Register import processor
      *
      * @param processor import processor
      */
-    private static void registerImpProcessor(TTProcessor<String, TTNode> processor) {
+    private static void registerImpProcessor(TTProcessor<String, TTNode<String>> processor) {
         for (String id : processor.getProcessorId()) {
             impProcessors.put(id, processor);
         }
@@ -93,7 +92,7 @@ public class TTControllerImpl implements TTController {
      *
      * @param processor export processor
      */
-    private static void registerExpProcessor(TTProcessor<TTNode, String> processor) {
+    private static void registerExpProcessor(TTProcessor<TTNode<String>, String> processor) {
         for (String id : processor.getProcessorId()) {
             expProcessors.put(id, processor);
         }
@@ -107,29 +106,27 @@ public class TTControllerImpl implements TTController {
         try {
             String packageName = Processor.class.getPackage().getName();
 
-            try (ScanResult scanResult = new ClassGraph().enableAllInfo().whitelistPackages(packageName).scan()) {
-                List<Class<?>> processorClasses = scanResult.getClassesWithAnnotation(Processor.class.getName()).loadClasses();
-                for (Class<?> clazz : processorClasses) {
-                    if (TTProcessor.class.isAssignableFrom(clazz) &&
-                            !Modifier.isAbstract(clazz.getModifiers()) &&
-                            !clazz.isInterface()) {
-                        Processor processorAnnotation = clazz.getAnnotation(Processor.class);
-                        if (processorAnnotation.processorType() == ProcessorType.IMPORT) {
+            for (Class<?> clazz : CommonUtils.getClasses(packageName)) {
+                if (clazz.isAnnotationPresent(Processor.class) &&
+                        TTProcessor.class.isAssignableFrom(clazz) &&
+                        !Modifier.isAbstract(clazz.getModifiers()) &&
+                        !clazz.isInterface()) {
+                    Processor annotation = clazz.getAnnotation(Processor.class);
+                    if (annotation.processorType() == ProcessorType.IMPORT) {
 //                      Class<? extends TTProcessor<String, TopologyTreeNode>> c = Class.forName(name).asSubclass(TTFsidImpProcessor.class);
-                            @SuppressWarnings("unchecked")
-                            Class<TTProcessor<String, TTNode>> importProcessor = (Class<TTProcessor<String, TTNode>>) clazz;
-                            registerImpProcessor(importProcessor.getConstructor().newInstance());
-                        } else if (processorAnnotation.processorType() == ProcessorType.EXPORT) {
-                            @SuppressWarnings("unchecked")
-                            Class<TTProcessor<TTNode, String>> exportProcessor = (Class<TTProcessor<TTNode, String>>) clazz;
-                            registerExpProcessor(exportProcessor.getConstructor().newInstance());
-                        } else {
-                            throw new TTException("Wrong processor type!");
-                        }
+                        @SuppressWarnings("unchecked")
+                        Class<TTProcessor<String, TTNode<String>>> importProcessor = (Class<TTProcessor<String, TTNode<String>>>) clazz;
+                        registerImpProcessor(importProcessor.getConstructor().newInstance());
+                    } else if (annotation.processorType() == ProcessorType.EXPORT) {
+                        @SuppressWarnings("unchecked")
+                        Class<TTProcessor<TTNode<String>, String>> exportProcessor = (Class<TTProcessor<TTNode<String>, String>>) clazz;
+                        registerExpProcessor(exportProcessor.getConstructor().newInstance());
+                    } else {
+                        throw new TTException("Wrong processor type!");
                     }
                 }
             }
-        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException | IOException e) {
             throw new TTException(e.getMessage());
         }
     }
@@ -146,5 +143,4 @@ public class TTControllerImpl implements TTController {
         }
         return instance;
     }
-
 }
