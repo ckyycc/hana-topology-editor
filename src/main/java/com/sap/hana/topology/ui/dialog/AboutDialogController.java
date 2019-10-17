@@ -11,7 +11,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class AboutDialogController extends DialogController<ButtonType> {
+public final class AboutDialogController extends DialogController<ButtonType> {
 
     @FXML
     private JFXButton btnOK;
