@@ -30,9 +30,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -167,16 +167,20 @@ public class TopologyEditorController {
 
             try {
                 if (savedFile.exists() && !savedFile.delete()) {
-                    showMsg("Failed to replace the file:" + savedFile.toString() + ", please check the related file access.", Status.ERROR);
+                    showMsg("Failed to replace the file:" + savedFile.toString() + ", please check the access right.", Status.ERROR);
                     event.consume();
                     return;
                 }
                 if (savedFile.createNewFile()) {
-                    try (FileWriter writer = new FileWriter(savedFile)) {
+                    //Use StreamWriter instead, to make sure the UTF8 charset
+                    try (Writer writer = new OutputStreamWriter(new FileOutputStream(savedFile), StandardCharsets.UTF_8)) {
                         writer.write(getController().exportTopology(this.topologyRootNode));
                     }
+//                    try (FileWriter writer = new FileWriter(savedFile)) {
+//                        writer.write(getController().exportTopology(this.topologyRootNode));
+//                    }
                 } else {
-                    showMsg("Failed to save the file:" + savedFile.toString() + ", please check the related file access.", Status.ERROR);
+                    showMsg("Failed to save the file:" + savedFile.toString() + ", please check the access right.", Status.ERROR);
                     event.consume();
                     return;
                 }
@@ -390,8 +394,8 @@ public class TopologyEditorController {
                 showMsg("File is bigger than 50MB, please make sure you chose the correct topology file.", Status.ERROR);
                 return;
             }
-
-            topologyStr = (new String(Files.readAllBytes(path))).replaceAll("[^\\n\\r\\t\\p{Print}]", "");
+            //Use UTF8 for those bytes, otherwise the first character will be replaced with ""
+            topologyStr = (new String(Files.readAllBytes(path), StandardCharsets.UTF_8)).replaceAll("[^\\n\\r\\t\\p{Print}]", "");
             onReload(null);
 
             topologyFileName = fileName;
