@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class ConfirmationDialogController extends DialogController<ButtonType> {
+public final class ConfirmationDialogController extends DialogController<ButtonType> {
     @FXML
     private JFXButton btnCancel;
     @FXML
