@@ -1,8 +1,5 @@
 package com.sap.hana.topology.tree.controller;
 
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.reflect.ClassPath;
 import com.sap.hana.topology.tree.processor.Processor;
 import com.sap.hana.topology.util.TTException;
 import com.sap.hana.topology.tree.processor.ProcessorType;
@@ -10,15 +7,14 @@ import com.sap.hana.topology.util.FileUtils;
 import com.sap.hana.topology.util.TreeUtils;
 import com.sap.hana.topology.tree.TTNode;
 import com.sap.hana.topology.tree.processor.TTProcessor;
+import io.github.classgraph.ScanResult;
+import io.github.classgraph.ClassGraph;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static java.lang.Class.forName;
 
 /**
  * Controller implementation, it's singleton.
@@ -109,42 +105,31 @@ public class TTControllerImpl implements TTController {
     private static void register() throws TTException {
 
         try {
-            //get class path
-            @SuppressWarnings("UnstableApiUsage") //the ClassPath has beta flag (guava)
-            ClassPath classPath = ClassPath.from(Thread.currentThread().getContextClassLoader());
-            //Get the package of processor
-            String packageName = TTProcessor.class.getPackage().getName();
-            //get all classes in the package
-            @SuppressWarnings("UnstableApiUsage") //the ClassPath has beta flag (guava)
-            ImmutableSet<ClassPath.ClassInfo> classes = classPath.getTopLevelClassesRecursive(packageName);
-            //get all classes full name
-            Collection<String> classNames = Collections2.transform(classes, classInfo -> classInfo != null ? classInfo.getName() : null);
+            String packageName = Processor.class.getPackage().getName();
 
-            for (String name : classNames) {
-                Class<?> clazz = forName(name);
-                if (TTProcessor.class.isAssignableFrom(clazz) &&
-                        !Modifier.isAbstract(clazz.getModifiers()) &&
-                        !clazz.isInterface() &&
-                        clazz.isAnnotationPresent(Processor.class)) {
-
-                    Processor processorAnnotation = clazz.getAnnotation(Processor.class);
-                    if (processorAnnotation.processorType() == ProcessorType.IMPORT) {
+            try (ScanResult scanResult = new ClassGraph().enableAllInfo().whitelistPackages(packageName).scan()) {
+                List<Class<?>> processorClasses = scanResult.getClassesWithAnnotation(Processor.class.getName()).loadClasses();
+                for (Class<?> clazz : processorClasses) {
+                    if (TTProcessor.class.isAssignableFrom(clazz) &&
+                            !Modifier.isAbstract(clazz.getModifiers()) &&
+                            !clazz.isInterface()) {
+                        Processor processorAnnotation = clazz.getAnnotation(Processor.class);
+                        if (processorAnnotation.processorType() == ProcessorType.IMPORT) {
 //                      Class<? extends TTProcessor<String, TopologyTreeNode>> c = Class.forName(name).asSubclass(TTFsidImpProcessor.class);
-                        @SuppressWarnings("unchecked")
-                        Class<TTProcessor<String, TTNode>> importProcessor = (Class<TTProcessor<String, TTNode>>) clazz;
-                        registerImpProcessor(importProcessor.getConstructor().newInstance());
-
-                    } else if (processorAnnotation.processorType() == ProcessorType.EXPORT) {
-                        @SuppressWarnings("unchecked")
-                        Class<TTProcessor<TTNode, String>> exportProcessor = (Class<TTProcessor<TTNode, String>>) clazz;
-                        registerExpProcessor(exportProcessor.getConstructor().newInstance());
-
-                    } else {
-                        throw new TTException("Wrong processor type!");
+                            @SuppressWarnings("unchecked")
+                            Class<TTProcessor<String, TTNode>> importProcessor = (Class<TTProcessor<String, TTNode>>) clazz;
+                            registerImpProcessor(importProcessor.getConstructor().newInstance());
+                        } else if (processorAnnotation.processorType() == ProcessorType.EXPORT) {
+                            @SuppressWarnings("unchecked")
+                            Class<TTProcessor<TTNode, String>> exportProcessor = (Class<TTProcessor<TTNode, String>>) clazz;
+                            registerExpProcessor(exportProcessor.getConstructor().newInstance());
+                        } else {
+                            throw new TTException("Wrong processor type!");
+                        }
                     }
                 }
             }
-        } catch (IOException | InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
+        } catch (InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             throw new TTException(e.getMessage());
         }
     }
