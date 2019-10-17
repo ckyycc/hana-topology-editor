@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TTNsutilExpProcessorTest {
 
-    private TTProcessor<TTNode, String> processor = new TTNsutilExpProcessor();
+    private TTProcessor<TTNode<String>, String> processor = new TTNsutilExpProcessor();
 
     private final static String str1 = "s>topology3\nn1>host\nn2>vanpghana11\ns<topology3\n";
 
-    private final static TTNode root = new TTNode("topology");
-    private final static TTNode host = new TTNode(root, "host");
-    private final static TTNode server = new TTNode(host, "vanpghana11");
+    private final static TTNode<String> root = new TTNode<>("topology");
+    private final static TTNode<String> host = new TTNode<>(root, "host");
+    private final static TTNode<String> server = new TTNode<>(host, "vanpghana11");
 
     @BeforeAll
     static void init() {

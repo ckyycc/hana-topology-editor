@@ -9,7 +9,7 @@ import com.sap.hana.topology.util.TreeUtils;
  * Processor for export topology file for hdbnsutil
  */
 @Processor(processorType = ProcessorType.EXPORT)
-public class TTNsutilExpProcessor implements TTProcessor<TTNode, String> {
+public final class TTNsutilExpProcessor implements TTProcessor<TTNode<String>, String> {
 
     /**
      * Get the string for exporting from topology tree
@@ -17,7 +17,7 @@ public class TTNsutilExpProcessor implements TTProcessor<TTNode, String> {
      * @return string of topology tree
      */
     @Override
-    public String process(TTNode topologyNode) throws TTProcessException {
+    public String process(TTNode<String> topologyNode) throws TTProcessException {
         if (topologyNode == null) {
             throw new TTProcessException("Internal error occurred, the provided tree node is empty.");
         }
@@ -29,11 +29,11 @@ public class TTNsutilExpProcessor implements TTProcessor<TTNode, String> {
      * @param topologyNode node of the tree
      * @return string of the topology tree
      */
-    private String getStringFromTopologyTree(TTNode topologyNode) {
+    private String getStringFromTopologyTree(TTNode<String> topologyNode) {
         StringBuilder treeBuffer = new StringBuilder();
         treeBuffer.append(getStringFromTopologyNode(topologyNode));
         if (topologyNode.getChildren() != null) {
-            for (TTNode item : topologyNode.getChildren()) {
+            for (TTNode<String> item : topologyNode.getChildren()) {
                 if (treeBuffer.length() > 0)
                     treeBuffer.append("\n");
                 treeBuffer.append(getStringFromTopologyTree(item));
@@ -48,7 +48,7 @@ public class TTNsutilExpProcessor implements TTProcessor<TTNode, String> {
      * @param topologyNode topology tree node
      * @return string of the provided topology tree node
      */
-    private String getStringFromTopologyNode(TTNode topologyNode) {
+    private String getStringFromTopologyNode(TTNode<String> topologyNode) {
         if (topologyNode.getLevel() <= 0) {
             return "";
         }

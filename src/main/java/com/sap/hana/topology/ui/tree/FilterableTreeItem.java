@@ -11,15 +11,15 @@ import javafx.scene.control.TreeItem;
 
 import java.lang.reflect.Field;
 
-public class FilterableTreeItem<T> extends TreeItem<T> {
+public final class FilterableTreeItem<T> extends TreeItem<T> {
     final private ObservableList<TreeItem<T>> sourceList;
     private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
 
-
     public FilterableTreeItem(T value) {
         super(value);
-        this.sourceList = FXCollections.observableArrayList();
+        sourceList = FXCollections.observableArrayList();
         FilteredList<TreeItem<T>> filteredList = new FilteredList<>(this.sourceList);
+        // Otherwise ask the TreeItemPredicate
         filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> child -> {
             // Set the predicate of child items to force filtering
             if (child instanceof FilterableTreeItem) {
@@ -27,14 +27,14 @@ public class FilterableTreeItem<T> extends TreeItem<T> {
                 filterableChild.setPredicate(this.predicate.get());
             }
             // If there is no predicate, keep this tree item
-            if (this.predicate.get() == null)
+            if (predicate.get() == null)
                 return true;
             // If there are children, keep this tree item
             if (child.getChildren().size() > 0)
                 return true;
-            // Otherwise ask the TreeItemPredicate
-            return this.predicate.get().test(this, child.getValue());
-        }, this.predicate));
+
+            return predicate.get().test(this, child.getValue());
+        }, predicate));
         setHiddenFieldChildren(filteredList);
     }
 

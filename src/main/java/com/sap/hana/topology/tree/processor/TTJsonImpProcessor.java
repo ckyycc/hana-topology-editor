@@ -12,7 +12,7 @@ import java.util.Map;
  * Processor for importing name server JSON topology file
  */
 @Processor(processorType = ProcessorType.IMPORT)
-public class TTJsonImpProcessor implements TTProcessor<String, TTNode> {
+public final class TTJsonImpProcessor implements TTProcessor<String, TTNode<String>> {
 
     /**
      * Load topology tree from json string
@@ -20,7 +20,7 @@ public class TTJsonImpProcessor implements TTProcessor<String, TTNode> {
      * @return topology tree root node
      */
     @Override
-    public TTNode process(String topologyStr) throws TTProcessException {
+    public TTNode<String> process(String topologyStr) throws TTProcessException {
         final String ROOT_STRING = "topology"; //Should not use TopologyTreeUtils.TOPOLOGY_TREE_ROOT_NAME, because this just happens to be the same value.
 
         Map<String, Object> topologyMap;
@@ -34,7 +34,7 @@ public class TTJsonImpProcessor implements TTProcessor<String, TTNode> {
             throw new TTProcessException("File format is not supported!");
         }
 
-        TTNode root = new TTNode(ROOT_STRING);
+        TTNode<String> root = new TTNode<>(ROOT_STRING);
         return buildTopologyTree(topologyMap.get(ROOT_STRING), root);
     }
 
@@ -45,11 +45,11 @@ public class TTJsonImpProcessor implements TTProcessor<String, TTNode> {
      * @return Tree Node
      */
     @SuppressWarnings("unchecked")
-    private TTNode buildTopologyTree(Object obj, TTNode node) {
+    private TTNode<String> buildTopologyTree(Object obj, TTNode<String> node) {
         if (obj instanceof Map) {
             Map<String, Object> mapItem = (Map<String, Object>)obj;
             for (String key : mapItem.keySet()) {
-                node.addChild(buildTopologyTree(mapItem.get(key), new TTNode(node, key)));
+                node.addChild(buildTopologyTree(mapItem.get(key), new TTNode<>(node, key)));
             }
         } else {
             if (obj instanceof Double) {

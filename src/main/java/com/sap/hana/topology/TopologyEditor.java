@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class TopologyEditor extends Application {
+public final class TopologyEditor extends Application {
 
     @Override
     public void start(Stage stage) throws Exception{

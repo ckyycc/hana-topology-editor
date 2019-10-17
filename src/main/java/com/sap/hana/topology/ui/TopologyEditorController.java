@@ -31,7 +31,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TopologyEditorController {
+public final class TopologyEditorController {
     @FXML
     private StackPane spMain;
     @FXML
@@ -88,7 +87,8 @@ public class TopologyEditorController {
         treeItemRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
             if (CommonUtils.isNullOrEmpty(txtFilter.getText()))
                 return null;
-            return TreeItemPredicate.create(actor -> actor.contains(txtFilter.getText()));
+            return TreeItemPredicate.create(actor ->
+                    actor.contains(txtFilter.getText()));
         }, txtFilter.textProperty()));
 
         treeItemRootNode.setExpanded(true);
@@ -271,7 +271,7 @@ public class TopologyEditorController {
         if (selectedNode.isLeaf()) {
             showMsg("Can not add sub node to leaf.", Status.WARN);
         } else {
-            loadDialog(true, null, null, selectedNode.getId(), true);
+            loadDialog(true, null, null, selectedNode.getId(), true, false);
         }
         event.consume();
     }
@@ -338,7 +338,7 @@ public class TopologyEditorController {
             return;
         }
 
-        loadDialog(selectedNode.isLeaf(), selectedNode.getName(), selectedNode.getValue(), selectedNode.getParent().getId(), false);
+        loadDialog(selectedNode.isLeaf(), selectedNode.getName(), selectedNode.getValue(), selectedNode.getParent().getId(), false, !CommonUtils.isNullOrEmpty(selectedNode.getChildren()));
         event.consume();
     }
 
@@ -410,7 +410,7 @@ public class TopologyEditorController {
     /**
      * load the dialog for editing tree node
      */
-    private void loadDialog(boolean isLeaf, String name, String value, String path, boolean insertFlag) {
+    private void loadDialog(boolean isLeaf, String name, String value, String path, boolean insertFlag, boolean childFlag) {
         try {
             UIUtils.<NodeEditDialogController>showDialog(
                     "/fxml/dialog/NodeEditDialog.fxml",
@@ -422,6 +422,7 @@ public class TopologyEditorController {
                         controller.setName(name);
                         controller.setValue(value);
                         controller.setEditFlag(insertFlag);
+                        controller.setChildFlag(childFlag);
                         controller.setConsumer(m -> {
                             boolean result = true;
                             if (m != null) {
@@ -439,7 +440,7 @@ public class TopologyEditorController {
                                         showMsg("'" + nameValueNew + "' is added to " + path + ".", Status.INFO);
                                     }
                                 } else { //update
-                                    result = updateCurrentNode(nameNew, valueNew);
+                                    result = updateCurrentNode(nameNew, valueNew, leaf);
                                     if (result) {
                                         showMsg("'" + nameValueOrg + "' is changed to '" + nameValueNew + "'.", Status.INFO);
                                     }
@@ -473,9 +474,9 @@ public class TopologyEditorController {
         }
 
         //update topology
-        TTNode topologyNode = isLeaf ?
-                new TTNode(selectedNode, name, value) :
-                new TTNode(selectedNode, name);
+        TTNode<String> topologyNode = isLeaf ?
+                new TTNode<>(selectedNode, name, value) :
+                new TTNode<>(selectedNode, name);
 
         selectedNode.addChild(topologyNode);
 
@@ -494,7 +495,7 @@ public class TopologyEditorController {
      * @param value the new value of the node
      * @return result of updating
      */
-    private boolean updateCurrentNode(String name, String value) {
+    private boolean updateCurrentNode(String name, String value, boolean isLeaf) {
         if (!name.equalsIgnoreCase(selectedNode.getName())) {
             // check whether the node already exists
             if (TreeUtils.getTopologyNodeFromParent(selectedNode.getParent(), name) != null) {
@@ -502,7 +503,20 @@ public class TopologyEditorController {
             }
         }
         selectedNode.setName(name);
-        selectedNode.setValue(value);
+        if (isLeaf) {
+            if (CommonUtils.isNullOrEmpty(selectedNode.getChildren())) {
+                selectedNode.setValue(value);
+                //current selected node is now leaf
+                isCurrentNodeLeaf.set(true);
+            } else {
+                showMsg("Can't set value to a node which contains subNode", Status.WARN);
+            }
+        } else {
+            selectedNode.setValue(null);
+            selectedNode.setLeaf(false);
+            //current selected node is now not leaf
+            isCurrentNodeLeaf.set(false);
+        }
 
         //update treeView item
         FilterableTreeItem<String> treeNode = (FilterableTreeItem<String>) tvTopology.getSelectionModel().getSelectedItem();
@@ -589,11 +603,11 @@ public class TopologyEditorController {
     }
 
     private File lastFileFolder;
-    private TTNode selectedNode;
+    private TTNode<String> selectedNode;
     private String topologyFileName;
     private String topologyStr;
-    private TTNode topologyRootNode;
-    private Map<TreeItem<String>, TTNode> treeViewMap;
+    private TTNode<String> topologyRootNode;
+    private Map<TreeItem<String>, TTNode<String>> treeViewMap;
     private FilterableTreeItem<String> treeItemRootNode;
     private BooleanProperty isCurrentNodeLeaf;
     private BooleanProperty isCurrentNodeRoot;

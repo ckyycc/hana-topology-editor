@@ -13,18 +13,18 @@ import java.util.regex.Pattern;
  * Processor for importing topology file from hdbnsutil
  */
 @Processor(processorType = ProcessorType.IMPORT)
-public class TTNsutilImpProcessor implements TTProcessor<String, TTNode> {
+public final class TTNsutilImpProcessor implements TTProcessor<String, TTNode<String>> {
     /**
      * Load topology tree from the output string of hdbnsutil
      * @param topologyStr the output topology string of hdbnsutil
      * @return topology tree root node
      */
     @Override
-    public TTNode process(String topologyStr) throws TTProcessException {
+    public TTNode<String> process(String topologyStr) throws TTProcessException {
         // split file to lines;
 
         // create root node
-        TTNode curNode = new TTNode(TreeUtils.TOPOLOGY_TREE_ROOT_NAME);
+        TTNode<String> curNode = new TTNode<>(TreeUtils.TOPOLOGY_TREE_ROOT_NAME);
 
         String[] tops = FileUtils.getTopologyInfo(topologyStr);
 
@@ -62,7 +62,7 @@ public class TTNsutilImpProcessor implements TTProcessor<String, TTNode> {
                     if (lvl <= curNode.getLevel()) {
                         curNode = TreeUtils.getParentByLevel(curNode, lvl);
                     }
-                    TTNode newNode = new TTNode(curNode, newNodeName);
+                    TTNode<String> newNode = new TTNode<>(curNode, newNodeName);
                     curNode.addChild(newNode);
                     curNode = newNode;
                 }

@@ -18,7 +18,7 @@ class UIUtilsTest {
     @ParameterizedTest
     @MethodSource ("getTreeNodeValue4DisplayArgFactory")
     void getTreeNodeValue4Display_AllNames_Success(String name) {
-        TTNode node = new TTNode("TEST_ID", name, "TEST_VALUE");
+        TTNode<String> node = new TTNode<>("TEST_ID", name, "TEST_VALUE");
         String res = UIUtils.getTreeNodeValue4Display(node);
 
         assertEquals(res, name);
@@ -26,16 +26,16 @@ class UIUtilsTest {
 
     @Test
     void buildTree_NullTreeItem_DoesNothing() {
-        Map<TreeItem<String>, TTNode> treeViewMap = new HashMap<>();
+        Map<TreeItem<String>, TTNode<String>> treeViewMap = new HashMap<>();
 
         //no exception should be threw
-        assertDoesNotThrow(() -> UIUtils.buildTree(null, new TTNode("TEST_ID", "TEST_NAME", "TEST_VALUE"), treeViewMap));
+        assertDoesNotThrow(() -> UIUtils.buildTree(null, new TTNode<>("TEST_ID", "TEST_NAME", "TEST_VALUE"), treeViewMap));
         assertEquals(0, treeViewMap.size());
     }
 
     @Test
     void buildTree_NullTreeNode_DoesNothing() {
-        Map<TreeItem<String>, TTNode> treeViewMap = new HashMap<>();
+        Map<TreeItem<String>, TTNode<String>> treeViewMap = new HashMap<>();
         //no exception should be threw
         assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), null, treeViewMap));
         assertEquals(0, treeViewMap.size());
@@ -43,18 +43,18 @@ class UIUtilsTest {
 
     @Test
     void buildTree_NullTreeMap_ThrowsTTException() {
-        Map<TreeItem<String>, TTNode> treeViewMap = null;
-        TTException thrown = assertThrows(TTException.class, () -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), new TTNode("TEST_ID", "TEST_NAME", "TEST_VALUE"), treeViewMap));
+        Map<TreeItem<String>, TTNode<String>> treeViewMap = null;
+        TTException thrown = assertThrows(TTException.class, () -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), new TTNode<>("TEST_ID", "TEST_NAME", "TEST_VALUE"), treeViewMap));
         assertTrue(thrown.getMessage().contains("Internal error occurred"));
 
     }
 
     @Test
     void buildTree_OneLevelTreeNode_Success() {
-        Map<TreeItem<String>, TTNode> treeViewMap = new HashMap<>();
-        TTNode node = new TTNode("TEST_ID", "TEST_NAME", "TEST_VALUE");
+        Map<TreeItem<String>, TTNode<String>> treeViewMap = new HashMap<>();
+        TTNode<String> node = new TTNode<>("TEST_ID", "TEST_NAME", "TEST_VALUE");
 
-        TreeItem<String> subNode = new FilterableTreeItem<>(node.getName());
+        TreeItem<String> subNode = new FilterableTreeItem<>(node.getName() + "/" + node.getValue());
 
         assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), node, treeViewMap));
 
@@ -68,20 +68,20 @@ class UIUtilsTest {
     @Test
     void buildTree_MultiLevelTreeNode_Success() {
         // build a test tree node
-        TTNode root = new TTNode("TEST_ID1", "TEST_NAME1");
-        TTNode child1 = new TTNode("TEST_ID2", "TEST_NAME2");
+        TTNode<String> root = new TTNode<>("TEST_ID1", "TEST_NAME1");
+        TTNode<String> child1 = new TTNode<>("TEST_ID2", "TEST_NAME2");
         root.addChild(child1);
-        TTNode child2 = new TTNode("TEST_ID3", "TEST_NAME3", "TEST_VALUE3");
+        TTNode<String> child2 = new TTNode<>("TEST_ID3", "TEST_NAME3", "TEST_VALUE3");
         child1.addChild(child2);
 
+        Map<TreeItem<String>, TTNode<String>> treeViewMap = new HashMap<>();
         //build the test tree items
         TreeItem<String> treeNode1 = new FilterableTreeItem<>(root.getName());
         TreeItem<String> treeNode2 = new FilterableTreeItem<>(child1.getName());
-        TreeItem<String> treeNode3 = new FilterableTreeItem<>(child2.getName());
-        Map<TreeItem<String>, TTNode> treeViewMap = new HashMap<>();
+        TreeItem<String> treeNode3 = new FilterableTreeItem<>(child2.getName() + "/" + child2.getValue());
 
         //build the test map
-        Map<String, TTNode> testMap = new HashMap<>();
+        Map<String, TTNode<String>> testMap = new HashMap<>();
         testMap.put(treeNode1.getValue(), root);
         testMap.put(treeNode2.getValue(), child1);
         testMap.put(treeNode3.getValue(), child2);
@@ -90,7 +90,7 @@ class UIUtilsTest {
         assertEquals(3, treeViewMap.size());
 
         //the result should be the same with the test map
-        for (Map.Entry<TreeItem<String>, TTNode> entry : treeViewMap.entrySet()) {
+        for (Map.Entry<TreeItem<String>, TTNode<String>> entry : treeViewMap.entrySet()) {
             assertTrue(testMap.containsKey(entry.getKey().getValue()));
             assertEquals(entry.getValue(), testMap.get(entry.getKey().getValue()));
         }

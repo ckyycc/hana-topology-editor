@@ -15,7 +15,7 @@ import javafx.scene.input.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeEditDialogController extends DialogController<Map<String, String>> {
+public final class NodeEditDialogController extends DialogController<Map<String, String>> {
     @FXML
     private JFXTextField txtName;
     @FXML
@@ -62,9 +62,11 @@ public class NodeEditDialogController extends DialogController<Map<String, Strin
     @FXML
     private void initialize() {
         // disable if name is empty or name and value are not changed
-        btnOK.disableProperty().bind(Bindings.or(txtName.textProperty().isEmpty(), Bindings.and(nameEqualFlag, valueEqualFlag)));
+        btnOK.disableProperty().bind(Bindings.or(txtName.textProperty().isEmpty(), nameEqualFlag.and(valueEqualFlag.and(leafEqualFlag))));
         txtValue.disableProperty().bind(Bindings.createBooleanBinding(() -> !tbLeaf.isSelected(), tbLeaf.selectedProperty()));
-        tbLeaf.disableProperty().bind(editFlag);
+        tbLeaf.disableProperty().bind(childFlag);
+
+        //disable tbLeaf if the node has children (can't switch back to leaf node)
     }
 
     /**
@@ -81,6 +83,7 @@ public class NodeEditDialogController extends DialogController<Map<String, Strin
      */
     public void setLeaf(boolean isLeaf) {
         tbLeaf.setSelected(isLeaf);
+        leafEqualFlag.bind(tbLeaf.selectedProperty().isEqualTo(new SimpleBooleanProperty(tbLeaf.isSelected())));
     }
 
     /**
@@ -99,6 +102,14 @@ public class NodeEditDialogController extends DialogController<Map<String, Strin
     public void setValue(String value) {
         txtValue.setText(value == null ? "" : value);
         valueEqualFlag.bind(txtValue.textProperty().isEqualTo(txtValue.getText()));
+    }
+
+    /**
+     * Set the children flag, indicating whether the related node has children or not
+     * @param childFlag children flag
+     */
+    public void setChildFlag(boolean childFlag) {
+        this.childFlag.set(childFlag);
     }
 
     /**
@@ -132,7 +143,9 @@ public class NodeEditDialogController extends DialogController<Map<String, Strin
      * Key - INSERT for delivering information via map
      */
     public final static String INSERT_FLAG = "insert";
+    private BooleanProperty childFlag = new SimpleBooleanProperty(true);
     private BooleanProperty editFlag = new SimpleBooleanProperty(true);
     private BooleanProperty nameEqualFlag = new SimpleBooleanProperty(true);
     private BooleanProperty valueEqualFlag = new SimpleBooleanProperty(true);
+    private BooleanProperty leafEqualFlag = new SimpleBooleanProperty(true);
 }

@@ -20,9 +20,9 @@ class TTControllerImplTest {
     private final static String str3 = "''=\n  host=\n    vanpghana11";
     private final static String str4 = "''\n  host\n    vanpghana11";
 
-    private final static TTNode root = new TTNode("topology");
-    private final static TTNode host = new TTNode(root, "host");
-    private final static TTNode server = new TTNode(host, "vanpghana11");
+    private final static TTNode<String> root = new TTNode<>("topology");
+    private final static TTNode<String> host = new TTNode<>(root, "host");
+    private final static TTNode<String> server = new TTNode<>(host, "vanpghana11");
 
     @BeforeAll
     static void init() {
@@ -39,7 +39,7 @@ class TTControllerImplTest {
     @ParameterizedTest
     @MethodSource("loadTopologyArgFactory")
     void loadTopology_ShouldReturnTreeNode(String topologyStr) {
-        TTNode node = assertDoesNotThrow(() -> ttController.loadTopology(topologyStr));
+        TTNode<String> node = assertDoesNotThrow(() -> ttController.loadTopology(topologyStr));
 
         assertAll(() -> assertEquals(node, root),
                 () -> assertEquals(node.getChildren().get(0), host),

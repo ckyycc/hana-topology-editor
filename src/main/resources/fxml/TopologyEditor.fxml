@@ -63,11 +63,5 @@
               </contextMenu>
           </JFXTreeView>
       </VBox>
-        <!--<JFXTreeViewPath>-->
-            <!--<fx:reference source="tvTopology"/>-->
-        <!--</JFXTreeViewPath>-->
-        <!--<Separator VBox.vgrow="NEVER" />
-        <TextField fx:id="txtStatus" editable="false" focusTraversable="false" prefHeight="27.0" styleClass="txt-status" VBox.vgrow="NEVER" />-->
-
     </VBox>
 </StackPane>

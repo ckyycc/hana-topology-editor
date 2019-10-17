@@ -14,9 +14,9 @@ import java.util.Map;
  * Implementation of tree cell, modified the display logic for leaf node:
  * for leaf node, the value and name will be displayed together
  */
-public class TreeCellImpl extends TreeCell<String> {
-    private Map<TreeItem<String>, TTNode> tvMap;
-    public TreeCellImpl(Map<TreeItem<String>, TTNode> treeViewMap) {
+public final class TreeCellImpl extends TreeCell<String> {
+    private Map<TreeItem<String>, TTNode<String>> tvMap;
+    public TreeCellImpl(Map<TreeItem<String>, TTNode<String>> treeViewMap) {
         tvMap = treeViewMap;
     }
 

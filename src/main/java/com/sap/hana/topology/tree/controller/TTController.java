@@ -14,7 +14,7 @@ public interface TTController {
      * @return topology tree root node
      * @throws TTException topology tree exception
      */
-    TTNode loadTopology(String topologyStr) throws TTException;
+    TTNode<String> loadTopology(String topologyStr) throws TTException;
 
     /**
      * Export topology from topology tree node to topology string
@@ -22,5 +22,5 @@ public interface TTController {
      * @return topology string
      * @throws TTException topology tree exception
      */
-    String exportTopology(TTNode topologyNode) throws TTException;
+    String exportTopology(TTNode<String> topologyNode) throws TTException;
 }

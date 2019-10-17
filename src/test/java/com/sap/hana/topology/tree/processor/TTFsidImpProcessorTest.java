@@ -11,16 +11,16 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TTFsidImpProcessorTest {
-    private TTProcessor<String, TTNode> processor = new TTFsidImpProcessor();
+    private TTProcessor<String, TTNode<String>> processor = new TTFsidImpProcessor();
 
     private final static String str1 = "s>topology3\nn1>host\nn2>vanpghana11\ns<topology3\n";
     private final static String str2 = "{\n\"topology\":{\n\"host\":{\"vanpghana11\":{}}}}";
     private final static String str3 = "''=\n  host=\n    vanpghana11";
     private final static String str4 = "''\n  host\n    vanpghana11";
 
-    private final static TTNode root = new TTNode("topology");
-    private final static TTNode host = new TTNode(root, "host");
-    private final static TTNode server = new TTNode(host, "vanpghana11");
+    private final static TTNode<String> root = new TTNode<>("topology");
+    private final static TTNode<String> host = new TTNode<>(root, "host");
+    private final static TTNode<String> server = new TTNode<>(host, "vanpghana11");
 
     @BeforeAll
     static void init() {
@@ -38,7 +38,7 @@ class TTFsidImpProcessorTest {
     @ParameterizedTest
     @MethodSource("loadTopologyArgFactoryCorrectFormat")
     void process_ShouldReturnTreeNodeIfFormatIsCorrect(String topologyStr) {
-        TTNode node = assertDoesNotThrow(() -> processor.process(topologyStr));
+        TTNode<String> node = assertDoesNotThrow(() -> processor.process(topologyStr));
         assertAll(() -> assertEquals(node, root),
                 () -> assertEquals(node.getChildren().get(0), host),
                 () -> assertEquals(node.getChildren().get(0).getChildren().get(0), server));

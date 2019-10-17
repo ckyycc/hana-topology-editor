@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Node of the topology tree.
  */
-public class TTNode {
+public final class TTNode <T> {
 
     /**
      * Delimiter between different nodes, it's using for node id
@@ -24,15 +24,20 @@ public class TTNode {
     /**
      * Name of the node
      */
-    private String name;
+    private T name;
 
     /**
      * Value of the node
      */
-    private String value;
+    private T value;
 
     /**
-     * flag of leaf node
+     * flag of leaf node.
+     * Note: leaf here is different with the "leaf" of a normal tree,
+     * leaf node in the topology tree means it contains value only
+     * non-leaf node in the topology tree means it can contain sub-node(s) only
+     * So, a non-leaf node can be a node which doesn't have either sub-node, but can't add value to it
+     * a leaf node can be a node which doesn't have value, but can't add sub-node to it
      */
     private boolean isLeaf;
 
@@ -44,17 +49,17 @@ public class TTNode {
     /**
      * Children list, this list is null if the node is leaf
      */
-    private List<TTNode> children;
+    private List<TTNode<T>> children;
 
     /**
      * Parent node, it is null if the node is root
      */
-    private TTNode parent;
+    private TTNode<T> parent;
 
     /**
      * Create a root node with name
      */
-    public TTNode(String name) {
+    public TTNode(T name) {
         this.id = ID_DELIMITER;
         this.name = name;
         this.isLeaf = false;
@@ -64,7 +69,7 @@ public class TTNode {
     /**
      * Create a non-leaf node with parent and name
      */
-    public TTNode(TTNode parent, String name) {
+    public TTNode(TTNode<T> parent, T name) {
         this.id = getTopologyPath(parent, name);
         this.name = name;
         this.level = parent.level + 1;
@@ -74,7 +79,7 @@ public class TTNode {
     /**
      * Create a leaf with parent, name and value
      */
-    public TTNode(TTNode parent, String name, String value) {
+    public TTNode(TTNode<T> parent, T name, T value) {
         this.id = getTopologyPath(parent, name);
         this.name = name;
         this.value = value;
@@ -85,7 +90,7 @@ public class TTNode {
     /**
      * Create a non-leaf node with id and name
      */
-    public TTNode(String id, String name) {
+    public TTNode(String id, T name) {
         this.id = id;
         this.name = name;
         this.isLeaf = false;
@@ -94,7 +99,7 @@ public class TTNode {
     /**
      * Create a leaf node with id, name and value
      */
-    public TTNode(String id, String name, String value) {
+    public TTNode(String id, T name, T value) {
         this.id = id;
         this.name = name;
         this.value = value;
@@ -118,7 +123,7 @@ public class TTNode {
     /**
      * Get name of current node;
      */
-    public String getName() {
+    public T getName() {
         return name;
     }
 
@@ -126,7 +131,7 @@ public class TTNode {
      * Set name of to current node, and update id accordingly.
      * @param name name of current node
      */
-    public void setName(String name) {
+    public void setName(T name) {
         if (!this.name.equals(name)) {
             this.name = name;
             updateId(); //name changed, id will be changed as well
@@ -136,7 +141,7 @@ public class TTNode {
     /**
      * Get value of current node;
      */
-    public String getValue() {
+    public T getValue() {
         return value;
     }
 
@@ -144,7 +149,7 @@ public class TTNode {
      * Set value to the node, and set the leaf flag accordingly
      * @param value value of the node
      */
-    public void setValue(String value) {
+    public void setValue(T value) {
         if (CommonUtils.isNullOrEmpty(this.children)) {
             this.value = value;
             this.isLeaf = true;
@@ -160,6 +165,20 @@ public class TTNode {
     }
 
     /**
+     * Set leaf property for the node
+     * @param leaf leaf flag
+     */
+    public void setLeaf(boolean leaf) {
+        if (leaf && !CommonUtils.isNullOrEmpty(this.getChildren())) {
+            throw new RuntimeException("Can not set a node to a leaf node when it contains sub-nodes!");
+        }
+
+        if (!leaf && this.getValue() != null) {
+            throw new RuntimeException("Can not set a node to a non-leaf node when it contains value!");
+        }
+        this.isLeaf = leaf;
+    }
+    /**
      * Current node is a root node or not.
      * @return true: it is a root node; false: it's not a root node;
      */
@@ -169,8 +188,8 @@ public class TTNode {
      * Get root node
      * @return root node
      */
-    public TTNode getRoot() {
-        TTNode root = this;
+    public TTNode<T> getRoot() {
+        TTNode<T> root = this;
 
         while (root.parent != null) {
             root = root.parent;
@@ -182,14 +201,14 @@ public class TTNode {
     /**
      * Get Parent of current node
      */
-    public TTNode getParent() {
+    public TTNode<T> getParent() {
         return parent;
     }
 
     /**
      * Get Children list of current node
      */
-    public List<TTNode> getChildren() {
+    public List<TTNode<T>> getChildren() {
         return children;
     }
 
@@ -197,7 +216,7 @@ public class TTNode {
      * Set parent to current node
      * @param parent parent of current node
      */
-    public void setParent(TTNode parent) {
+    public void setParent(TTNode<T> parent) {
         this.parent = parent;
     }
 
@@ -205,7 +224,7 @@ public class TTNode {
      * Add child node to current node
      * @param child child node to be added
      */
-    public void addChild(TTNode child) {
+    public void addChild(TTNode<T> child) {
         if (isLeaf) {
             throw new RuntimeException("Can not add child to a LEAF node.");
         }
@@ -222,39 +241,19 @@ public class TTNode {
      * Delete child node from current node
      * @param child child node to be deleted
      */
-    public void deleteChild(TTNode child) {
+    public void deleteChild(TTNode<T> child) {
         if (!CommonUtils.isNullOrEmpty(children)) {
             children.remove(child);
         }
     }
 
-//    /**
-//     * get parent node by level, only apply to parents (provided level <= current)
-//     */
-//    public TopologyTreeNode getParentByLevel(int lvl) throws TTException {
-//        if (lvl <= 0) {
-//            throw new TTException("Can not get the parent for the root node.");
-//        }
-//        if (lvl == level) {
-//            return parent;
-//        } else if (lvl < level) {
-//            TopologyTreeNode parentNode = parent;
-//            while (parentNode.level > lvl) {
-//                parentNode = parentNode.parent;
-//            }
-//            return parentNode.parent;
-//        } else {
-//            throw new TTException("Can not get the parent by the smaller level.");
-//        }
-//    }
-
     /**
      * Get topology path via parent node, the path = parent.id + "/" + name of current node
      * @param parent parent node
-     * @param name current node name
+     * @param name current node name, to get a better path, this object needs to implement toString()
      * @return the topology path
      */
-    private String getTopologyPath(TTNode parent, String name) {
+    private String getTopologyPath(TTNode<T> parent, T name) {
         return parent.getId().equals(ID_DELIMITER) ? parent.getId() + name : parent.getId() + ID_DELIMITER + name;
     }
 

@@ -10,18 +10,18 @@ import com.sap.hana.topology.util.TreeUtils;
  * Processor for importing FSID topology txt file
  */
 @Processor(processorType = ProcessorType.IMPORT)
-public class TTFsidImpProcessor implements TTProcessor<String, TTNode> {
+public final class TTFsidImpProcessor implements TTProcessor<String, TTNode<String>> {
     /**
      * Load topology tree from full system dump topology file string
      * @param topologyStr the string of full system dump topology file
      * @return topology tree root node
      */
     @Override
-    public TTNode process (String topologyStr) throws TTProcessException {
+    public TTNode<String> process (String topologyStr) throws TTProcessException {
         // split file to lines;
 
         // create root node
-        TTNode curNode = new TTNode(TreeUtils.TOPOLOGY_TREE_ROOT_NAME);
+        TTNode<String> curNode = new TTNode<>(TreeUtils.TOPOLOGY_TREE_ROOT_NAME);
         String[] tops = FileUtils.getTopologyInfo(topologyStr);
 
         if (tops == null) {
@@ -40,16 +40,16 @@ public class TTFsidImpProcessor implements TTProcessor<String, TTNode> {
                 //get value if have
                 int level = getLevel(line);
                 String[] node = line.substring(level * 2).split("=");
-                TTNode newNode;
+                TTNode<String> newNode;
 
                 if (level <= curNode.getLevel()) {
                     curNode = TreeUtils.getParentByLevel(curNode, level);
                 }
 
                 if (node.length > 1 && !CommonUtils.isNullOrEmpty(node[1].trim())) {
-                    newNode = new TTNode(curNode, node[0], node[1]);
+                    newNode = new TTNode<>(curNode, node[0], node[1]);
                 } else {
-                    newNode = new TTNode(curNode, node[0]);
+                    newNode = new TTNode<>(curNode, node[0]);
                 }
 
                 curNode.addChild(newNode);
