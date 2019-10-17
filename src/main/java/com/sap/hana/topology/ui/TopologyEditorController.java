@@ -421,7 +421,7 @@ public final class TopologyEditorController {
                         controller.setLeaf(isLeaf);
                         controller.setName(name);
                         controller.setValue(value);
-                        controller.setEditFlag(insertFlag);
+                        controller.setInsertFlag(insertFlag);
                         controller.setChildFlag(childFlag);
                         controller.setConsumer(m -> {
                             boolean result = true;

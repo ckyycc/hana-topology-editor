@@ -41,7 +41,7 @@ public final class NodeEditDialogController extends DialogController<Map<String,
         map.put(TXT_NAME, txtName.getText());
         map.put(TXT_VALUE, txtValue.getText());
         map.put(TB_LEAF, String.valueOf(tbLeaf.isSelected()));
-        map.put(INSERT_FLAG, String.valueOf(!editFlag.getValue()));
+        map.put(INSERT_FLAG, String.valueOf(insertFlag));
         accept(map);
         if (event != null) event.consume();
     }
@@ -114,10 +114,10 @@ public final class NodeEditDialogController extends DialogController<Map<String,
 
     /**
      * Set the edit flag, indicating whether this dialog is for editing or inserting
-     * @param editFlag edit flag
+     * @param insertFlag insert flag
      */
-    public void setEditFlag(boolean editFlag) {
-        this.editFlag.setValue(!editFlag);
+    public void setInsertFlag(boolean insertFlag) {
+        this.insertFlag = insertFlag;
     }
 
     /**
@@ -143,8 +143,9 @@ public final class NodeEditDialogController extends DialogController<Map<String,
      * Key - INSERT for delivering information via map
      */
     public final static String INSERT_FLAG = "insert";
+
+    private boolean insertFlag;
     private BooleanProperty childFlag = new SimpleBooleanProperty(true);
-    private BooleanProperty editFlag = new SimpleBooleanProperty(true);
     private BooleanProperty nameEqualFlag = new SimpleBooleanProperty(true);
     private BooleanProperty valueEqualFlag = new SimpleBooleanProperty(true);
     private BooleanProperty leafEqualFlag = new SimpleBooleanProperty(true);
