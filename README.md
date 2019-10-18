@@ -27,9 +27,15 @@ Any usage of this HANA Topology Editor assumes that you have understood and agre
 Check out below demos: [view](#view), [edit](#edit), [delete](#delete), [add](#add).
 
 #### View
+<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/view.png" width="368">
 
 #### Edit
+<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/edit1.png" width="368">
+<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/edit2.png" width="368">
 
 #### Delete
+<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/delete.png" width="368">
 
 #### Add
+<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/add1.png" width="368">
+<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/add2.png" width="368">
