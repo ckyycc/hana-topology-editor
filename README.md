@@ -22,6 +22,12 @@ Any usage of this HANA Topology Editor assumes that you have understood and agre
 4. HANA Topology Editor is to be used on "your own risk", please always backup the topology file before using it;
 5. HANA Topology Editor is a one-man's hobby; developed, maintained and supported only during non-working hours.
 
+### Download
+
+Download the [exe file](https://github.com/ckyycc/hana-topology-editor/raw/master/HANATopologyEditor.exe)
+
+Download the [executable jar file](https://github.com/ckyycc/hana-topology-editor/raw/master/HANATopologyEditor.jar)
+
 ### Demo
 
 Check out below demos: [view and delete](#view-and-delete), [edit](#edit), [add](#add).
