@@ -113,7 +113,6 @@ public final class TTControllerImpl implements TTController {
                         !clazz.isInterface()) {
                     Processor annotation = clazz.getAnnotation(Processor.class);
                     if (annotation.processorType() == ProcessorType.IMPORT) {
-//                      Class<? extends TTProcessor<String, TopologyTreeNode>> c = Class.forName(name).asSubclass(TTFsidImpProcessor.class);
                         @SuppressWarnings("unchecked")
                         Class<TTProcessor<String, TTNode<String>>> importProcessor = (Class<TTProcessor<String, TTNode<String>>>) clazz;
                         registerImpProcessor(importProcessor.getConstructor().newInstance());

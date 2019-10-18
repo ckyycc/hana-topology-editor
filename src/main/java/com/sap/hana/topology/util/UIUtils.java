@@ -100,6 +100,7 @@ public final class UIUtils {
             return; //not to display empty text
         }
 
+        //set width for status bar base on the container width and font size
         int lenRestriction = (int) ((statusBar.getPopupContainer().getWidth() - 55) / 6.2);
         if (text.length() > lenRestriction) {
             text = "..." + text.substring(text.length() - lenRestriction);
