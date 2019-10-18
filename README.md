@@ -2,12 +2,12 @@
 
 HANA Topology Editor is a tool for viewing/editing HANA topology file written in Java.
 
-><img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/small-demo.gif" width="300">
-
 It supports three different types of topology files: 
 1. Exported via `hdbnsutil -exportTopology <topology file>`;
 2. topology.txt in root directory of full system dump (System DB if MDC);
 3. nameserver_topology_<host>.json in trace folder (needs >= SPS03).
+  
+&emsp; <img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/small-demo.gif" width="300">
 
 This tool is only designed for below scenarios:
 1. View the topology info from the file exported via `hdbnsutil -exportTopology <topology file>`;
@@ -27,7 +27,7 @@ Any usage of this HANA Topology Editor assumes that you have understood and agre
 
 ## Download
 
-This tool is written in Java 8, please make sure jre version 1.8 (or later) is installed.
+This tool is written in Java 8, please make sure JRE version 1.8 (or later) is installed.
 
 Download the [exe file (HANATopologyEditor.exe)](https://github.com/ckyycc/hana-topology-editor/raw/master/HANATopologyEditor.exe).
 
