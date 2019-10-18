@@ -30,7 +30,7 @@ Download the [executable jar file (HANATopologyEditor.jar)](https://github.com/c
 
 ### Demo
 
-Check out below demos: [view and delete](#view-and-delete), [edit](#edit), [add](#add).
+Check out below demos: [view and delete](#view-and-delete), [edit](#edit) and [add](#add).
 
 ##### View and Delete
 <img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/view.png" width="368">|<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/delete.png" width="368">
