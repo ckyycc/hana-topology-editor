@@ -24,9 +24,9 @@ Any usage of this HANA Topology Editor assumes that you have understood and agre
 
 ### Download
 
-Download the [exe file](https://github.com/ckyycc/hana-topology-editor/raw/master/HANATopologyEditor.exe)
+Download the [exe file (HANATopologyEditor.exe)](https://github.com/ckyycc/hana-topology-editor/raw/master/HANATopologyEditor.exe).
 
-Download the [executable jar file](https://github.com/ckyycc/hana-topology-editor/raw/master/HANATopologyEditor.jar)
+Download the [executable jar file (HANATopologyEditor.jar)](https://github.com/ckyycc/hana-topology-editor/raw/master/HANATopologyEditor.jar).
 
 ### Demo
 
