@@ -449,7 +449,7 @@ public final class TopologyEditorController {
                             if (result) {
                                 controller.close();
                             } else {
-                                showMsg("Operation failed, please check whether the name '" + m.get(NodeEditDialogController.TXT_NAME) + "' already exists.", Status.ERROR);
+                                showMsg("Operation failed, check whether the name '" + m.get(NodeEditDialogController.TXT_NAME) + "' already exists.", Status.ERROR);
                             }
                             tvTopology.requestFocus(); //set focus back to tree
                         });

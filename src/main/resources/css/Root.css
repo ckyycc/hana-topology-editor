@@ -34,10 +34,10 @@
 /* status bar */
    -fx-sb-background: -fx-tv-text-dark;
    -fx-sb-text: -fx-tv-text-light;
-   -fx-sb-background-success: #43a047;
-   -fx-sb-background-info: #1976d2;
-   -fx-sb-background-warn: #ffa000;
-   -fx-sb-background-error: #d32f2f;
+   -fx-sb-background-success: rgb(67,160,71);
+   -fx-sb-background-info: rgb(25,118,210);
+   -fx-sb-background-warn: rgb(255,160,0);
+   -fx-sb-background-error: rgb(211,47,47);
    -fx-sb-text-action: -fx-tv-text-light;
    -fx-sb-text-action-hover: GreenYellow;
 }
