@@ -183,8 +183,12 @@
     -fx-cursor: hand;
     -fx-font-size: 11px;
     -fx-focus-traversable: false;
+    -fx-border-style: dotted;
+    -fx-border-color: transparent;
+    -fx-border-radius: 3 3 3 3;
 }
 .jfx-snackbar-action: hover {
     -fx-text-fill: -fx-sb-text-action-hover;
+    -fx-border-color: -fx-sb-text-action-hover;
 }
 

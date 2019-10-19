@@ -39,5 +39,5 @@
    -fx-sb-background-warn: rgb(255,160,0);
    -fx-sb-background-error: rgb(211,47,47);
    -fx-sb-text-action: -fx-tv-text-light;
-   -fx-sb-text-action-hover: GreenYellow;
+   -fx-sb-text-action-hover: -fx-tv-text-light;
 }
