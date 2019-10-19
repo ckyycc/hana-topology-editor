@@ -2,7 +2,7 @@
 
 HANA Topology Editor is a tool for viewing/editing HANA topology file written in Java.
 
-&ensp;<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/small-demo.gif" width="300">
+&ensp;<img src="https://github.com/ckyycc/HANATopologyEditor/blob/master/src/demo/small-demo.gif" width="350">
 
 It supports three different types of topology files: 
 1. Exported via `hdbnsutil -exportTopology <topology file>`;
