@@ -5,6 +5,7 @@ package com.sap.hana.topology.util;
  */
 public enum Status {
     NORMAL,
+    SUCCESS,
     INFO,
     WARN,
     ERROR

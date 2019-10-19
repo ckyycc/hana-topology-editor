@@ -309,7 +309,7 @@ public final class TopologyEditorController {
                                 FilterableTreeItem<String> c = (FilterableTreeItem<String>) tvTopology.getSelectionModel().getSelectedItem();
                                 treeViewMap.remove(c);
                                 ((FilterableTreeItem<String>) c.getParent()).getInternalChildren().remove(c);
-                                showMsg("'" + nodeToDelete + "' is deleted.", Status.INFO);
+                                showMsg("'" + nodeToDelete + "' is deleted.", Status.SUCCESS);
                             }
 
                             controller.close();
@@ -437,12 +437,12 @@ public final class TopologyEditorController {
                                 if (insert) { //insert
                                     result = insertNode(nameNew, valueNew, leaf);
                                     if (result) {
-                                        showMsg("'" + nameValueNew + "' is added to " + path + ".", Status.INFO);
+                                        showMsg("'" + nameValueNew + "' is added to " + path + ".", Status.SUCCESS);
                                     }
                                 } else { //update
                                     result = updateCurrentNode(nameNew, valueNew, leaf);
                                     if (result) {
-                                        showMsg("'" + nameValueOrg + "' is changed to '" + nameValueNew + "'.", Status.INFO);
+                                        showMsg("'" + nameValueOrg + "' is changed to '" + nameValueNew + "'.", Status.SUCCESS);
                                     }
                                 }
                             }

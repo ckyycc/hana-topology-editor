@@ -34,6 +34,7 @@
 /* status bar */
    -fx-sb-background: -fx-tv-text-dark;
    -fx-sb-text: -fx-tv-text-light;
+   -fx-sb-background-success: #43a047;
    -fx-sb-background-info: #1976d2;
    -fx-sb-background-warn: #ffa000;
    -fx-sb-background-error: #d32f2f;

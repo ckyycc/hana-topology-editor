@@ -156,9 +156,12 @@
     /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0.2, 0, 0);*/
 }
 
+.jfx-snackbar-content: success {
+    -fx-background-color: -fx-sb-background-success;
+}
+
 .jfx-snackbar-content: info {
     -fx-background-color: -fx-sb-background-info;
-
 }
 
 .jfx-snackbar-content: warn {

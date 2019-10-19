@@ -30,6 +30,7 @@ public final class UIUtils {
     public final static String HOST_SERVICES = "hostServices";
 
     // Declaration of PseudoClasses
+    private final static PseudoClass SUCCESS_PSEUDO = PseudoClass.getPseudoClass("success");
     private final static PseudoClass INFO_PSEUDO = PseudoClass.getPseudoClass("info");
     private final static PseudoClass WARN_PSEUDO = PseudoClass.getPseudoClass("warn");
     private final static PseudoClass ERROR_PSEUDO = PseudoClass.getPseudoClass("error");
@@ -111,22 +112,32 @@ public final class UIUtils {
         if (statusBar.getChildren().size() > 0 && statusBar.getChildren().get(0) instanceof StackPane) {
             StackPane sbPane = (StackPane) statusBar.getChildren().get(0);
             switch (status) {
+                case SUCCESS:
+                    sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, true);
+                    sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
+                    break;
                 case INFO:
+                    sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(INFO_PSEUDO, true);
                     sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
                     break;
                 case WARN:
+                    sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(WARN_PSEUDO, true);
                     sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
                     break;
                 case ERROR:
+                    sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(ERROR_PSEUDO, true);
                     sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
                     break;
                 default:
+                    sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
                     sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
