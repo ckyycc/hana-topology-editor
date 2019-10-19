@@ -15,7 +15,7 @@ This tool is only designed for below scenarios:
 3. View `nameserver_topology_<host>.json` in trace folder;
 4. Edit/Export the topology and import it back via `hdbnsutil -importTopology <topology file>` when HANA can't be started up because of the topology issues.
 
-## Disclaimer:
+## Disclaimer
 
 Any usage of this HANA Topology Editor assumes that you have understood and agreed that:
 
