@@ -107,28 +107,29 @@ public final class UIUtils {
         }
 
         JFXSnackbarLayout layout = new JFXSnackbarLayout(text, "x", action -> statusBar.close());
-        if (layout.getLeft() instanceof  StackPane) {
-            Node label = ((StackPane)layout.getLeft()).getChildren().get(0);
+
+        if (statusBar.getChildren().size() > 0 && statusBar.getChildren().get(0) instanceof StackPane) {
+            StackPane sbPane = (StackPane) statusBar.getChildren().get(0);
             switch (status) {
                 case INFO:
-                    label.pseudoClassStateChanged(INFO_PSEUDO, true);
-                    label.pseudoClassStateChanged(WARN_PSEUDO, false);
-                    label.pseudoClassStateChanged(ERROR_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(INFO_PSEUDO, true);
+                    sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
                     break;
                 case WARN:
-                    label.pseudoClassStateChanged(WARN_PSEUDO, true);
-                    label.pseudoClassStateChanged(INFO_PSEUDO, false);
-                    label.pseudoClassStateChanged(ERROR_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(WARN_PSEUDO, true);
+                    sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
                     break;
                 case ERROR:
-                    label.pseudoClassStateChanged(ERROR_PSEUDO, true);
-                    label.pseudoClassStateChanged(WARN_PSEUDO, false);
-                    label.pseudoClassStateChanged(INFO_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(ERROR_PSEUDO, true);
+                    sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
                     break;
                 default:
-                    layout.pseudoClassStateChanged(INFO_PSEUDO, false);
-                    layout.pseudoClassStateChanged(WARN_PSEUDO, false);
-                    layout.pseudoClassStateChanged(ERROR_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
+                    sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
             }
         }
         statusBar.fireEvent(new JFXSnackbar.SnackbarEvent(layout, Duration.INDEFINITE, null));

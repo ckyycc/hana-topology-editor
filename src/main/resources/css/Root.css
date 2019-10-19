@@ -7,7 +7,7 @@
 
 /* normal text */
    -fx-tv-text-light: white;
-   -fx-tv-text-dark: black;
+   -fx-tv-text-dark: rgb(50, 50, 50);
 
 /* color for main framework */
    -fx-tv-main-color: rgba(77, 102, 204, 1);
@@ -31,11 +31,12 @@
 /* color for button hover light color */
    -fx-button-hover-light: rgb(240, 255, 240);
 
-/* status bar text */
-   -fx-tv-text-background: rgb(245, 250, 255);
-   -fx-tv-text-info: blue;
-   -fx-tv-text-warn: DarkOrange;
-   -fx-tv-text-error: red;
-   -fx-tv-text-action: -fx-tv-main-color;
-   -fx-tv-text-action-hover: DarkOrange;
+/* status bar */
+   -fx-sb-background: -fx-tv-text-dark;
+   -fx-sb-text: -fx-tv-text-light;
+   -fx-sb-background-info: #1976d2;
+   -fx-sb-background-warn: #ffa000;
+   -fx-sb-background-error: #d32f2f;
+   -fx-sb-text-action: -fx-tv-text-light;
+   -fx-sb-text-action-hover: GreenYellow;
 }

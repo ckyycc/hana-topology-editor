@@ -147,34 +147,41 @@
 
 /* status bar */
 .jfx-snackbar-content {
-    -fx-background-color: -fx-tv-text-background;
+    -fx-pref-height: 50px;
+    -fx-max-height: 50px;
+    -fx-min-height: 50px;
+    -fx-background-color: -fx-sb-background;
+    -fx-background-radius: 3 3 3 3;
+    -fx-border-radius: 3 3 3 3;
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 4, 0.2, 0, 0);*/
+}
+
+.jfx-snackbar-content: info {
+    -fx-background-color: -fx-sb-background-info;
+
+}
+
+.jfx-snackbar-content: warn {
+    -fx-background-color: -fx-sb-background-warn;
+}
+
+.jfx-snackbar-content: error {
+    -fx-background-color: -fx-sb-background-error;
 }
 
 .jfx-snackbar-toast {
     -fx-font-size: 11px;
-    -fx-text-fill: -fx-tv-text-dark;
+    -fx-text-fill: -fx-sb-text;
     -fx-wrap-text: true;
 }
 
-.jfx-snackbar-toast: info {
-    -fx-text-fill: -fx-tv-text-info;
-}
-
-.jfx-snackbar-toast: warn {
-    -fx-text-fill: -fx-tv-text-warn;
-}
-
-.jfx-snackbar-toast: error {
-    -fx-text-fill: -fx-tv-text-error;
-}
-
 .jfx-snackbar-action {
-    -fx-text-fill: -fx-tv-text-action;
+    -fx-text-fill: -fx-sb-text-action;
     -fx-cursor: hand;
     -fx-font-size: 11px;
     -fx-focus-traversable: false;
 }
 .jfx-snackbar-action: hover {
-    -fx-text-fill: -fx-tv-text-action-hover;
+    -fx-text-fill: -fx-sb-text-action-hover;
 }
 
