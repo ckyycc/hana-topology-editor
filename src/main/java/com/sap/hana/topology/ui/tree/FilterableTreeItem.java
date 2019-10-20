@@ -15,24 +15,36 @@ public final class FilterableTreeItem<T> extends TreeItem<T> {
     final private ObservableList<TreeItem<T>> sourceList;
     private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
 
-    public FilterableTreeItem(T value) {
+    private T id;
+
+    public FilterableTreeItem(T value, T id) {
         super(value);
+        this.id = id;
         sourceList = FXCollections.observableArrayList();
         FilteredList<TreeItem<T>> filteredList = new FilteredList<>(this.sourceList);
         // Otherwise ask the TreeItemPredicate
         filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> child -> {
             // Set the predicate of child items to force filtering
+            FilterableTreeItem<T> filterableChild = null;
             if (child instanceof FilterableTreeItem) {
-                FilterableTreeItem<T> filterableChild = (FilterableTreeItem<T>) child;
-                filterableChild.setPredicate(this.predicate.get());
+                filterableChild = (FilterableTreeItem<T>) child;
+                filterableChild.setPredicate(predicate.get());
             }
             // If there is no predicate, keep this tree item
-            if (predicate.get() == null)
+            if (predicate.get() == null) {
                 return true;
+            }
             // If there are children, keep this tree item
-            if (child.getChildren().size() > 0)
+            if (child.getChildren().size() > 0) {
                 return true;
+            }
 
+            // If it is filterable item, filter it with id,
+            // which means when hitting parent node, all sub-nodes will be shown as well)
+            if (filterableChild != null && filterableChild.id != null) {
+                return predicate.get().test(this, filterableChild.id);
+            }
+            // normal item return getValue instead
             return predicate.get().test(this, child.getValue());
         }, predicate));
         setHiddenFieldChildren(filteredList);

@@ -6,6 +6,7 @@ import javafx.scene.control.TreeItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,14 +38,14 @@ class UIUtilsTest {
     void buildTree_NullTreeNode_DoesNothing() {
         Map<TreeItem<String>, TTNode<String>> treeViewMap = new HashMap<>();
         //no exception should be threw
-        assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), null, treeViewMap));
+        assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST", "TEST"), null, treeViewMap));
         assertEquals(0, treeViewMap.size());
     }
 
     @Test
     void buildTree_NullTreeMap_ThrowsTTException() {
         Map<TreeItem<String>, TTNode<String>> treeViewMap = null;
-        TTException thrown = assertThrows(TTException.class, () -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), new TTNode<>("TEST_ID", "TEST_NAME", "TEST_VALUE"), treeViewMap));
+        TTException thrown = assertThrows(TTException.class, () -> UIUtils.buildTree(new FilterableTreeItem<>("TEST", "TEST"), new TTNode<>("TEST_ID", "TEST_NAME", "TEST_VALUE"), treeViewMap));
         assertTrue(thrown.getMessage().contains("Internal error occurred"));
 
     }
@@ -54,9 +55,9 @@ class UIUtilsTest {
         Map<TreeItem<String>, TTNode<String>> treeViewMap = new HashMap<>();
         TTNode<String> node = new TTNode<>("TEST_ID", "TEST_NAME", "TEST_VALUE");
 
-        TreeItem<String> subNode = new FilterableTreeItem<>(node.getName() + "/" + node.getValue());
+        TreeItem<String> subNode = new FilterableTreeItem<>(node.getName(), "TEST");
 
-        assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), node, treeViewMap));
+        assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST", "TEST"), node, treeViewMap));
 
         assertEquals(1, treeViewMap.size());
         TreeItem<String> item = treeViewMap.keySet().iterator().next();
@@ -76,9 +77,9 @@ class UIUtilsTest {
 
         Map<TreeItem<String>, TTNode<String>> treeViewMap = new HashMap<>();
         //build the test tree items
-        TreeItem<String> treeNode1 = new FilterableTreeItem<>(root.getName());
-        TreeItem<String> treeNode2 = new FilterableTreeItem<>(child1.getName());
-        TreeItem<String> treeNode3 = new FilterableTreeItem<>(child2.getName() + "/" + child2.getValue());
+        TreeItem<String> treeNode1 = new FilterableTreeItem<>(root.getName(), "TEST");
+        TreeItem<String> treeNode2 = new FilterableTreeItem<>(child1.getName(), "TEST");
+        TreeItem<String> treeNode3 = new FilterableTreeItem<>(child2.getName(), "TEST");
 
         //build the test map
         Map<String, TTNode<String>> testMap = new HashMap<>();
@@ -86,7 +87,7 @@ class UIUtilsTest {
         testMap.put(treeNode2.getValue(), child1);
         testMap.put(treeNode3.getValue(), child2);
 
-        assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST"), root, treeViewMap));
+        assertDoesNotThrow(() -> UIUtils.buildTree(new FilterableTreeItem<>("TEST", "TEST"), root, treeViewMap));
         assertEquals(3, treeViewMap.size());
 
         //the result should be the same with the test map
@@ -94,6 +95,31 @@ class UIUtilsTest {
             assertTrue(testMap.containsKey(entry.getKey().getValue()));
             assertEquals(entry.getValue(), testMap.get(entry.getKey().getValue()));
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"test_value", ""})
+    void getId4FilterableTreeItem_ShouldReturnIDPlusValueForLeadNodeIfValueIsNotNull(String value) {
+        String name = "TEST_NAME";
+        TTNode<String> node = new TTNode<>("/" + name, name, value);
+
+        assertEquals(UIUtils.getId4FilterableTreeItem(node), node.getId() + "/" + node.getValue());
+    }
+
+    @Test
+    void getId4FilterableTreeItem_ShouldReturnIDForLeadNodeIfValueIsNull() {
+        String name = "TEST_NAME", value = null;
+        TTNode<String> node = new TTNode<>("/" + name, name, value);
+
+        assertEquals(UIUtils.getId4FilterableTreeItem(node), node.getId());
+    }
+
+    @Test
+    void getId4FilterableTreeItem_ShouldReturnIDForNonLeadNode() {
+        String name = "TEST_NAME";
+        TTNode<String> node = new TTNode<>("/" + name, name);
+
+        assertEquals(UIUtils.getId4FilterableTreeItem(node), node.getId());
     }
 
     private static Stream<String> getTreeNodeValue4DisplayArgFactory() {

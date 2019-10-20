@@ -7,7 +7,6 @@ import com.sap.hana.topology.tree.TTNode;
 import com.sap.hana.topology.ui.tree.FilterableTreeItem;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.StackPane;
@@ -49,8 +48,8 @@ public final class UIUtils {
         //does nothing if related tree node is null
         if (topologyNode != null && treeNode != null) {
             //create tree item. For search purpose, set value to tree item if it is leaf node
-            FilterableTreeItem<String> subNode = new FilterableTreeItem<>(
-                    topologyNode.getValue() != null ? topologyNode.getName() + "/" + topologyNode.getValue() : topologyNode.getName());
+            FilterableTreeItem<String> subNode =
+                    new FilterableTreeItem<>(topologyNode.getName(), getId4FilterableTreeItem(topologyNode));
 
             //update map
             treeViewMap.put(subNode, topologyNode);
@@ -197,5 +196,14 @@ public final class UIUtils {
         setDialogMethod.invoke(controller, dialog);
 
         consumer.accept(controller);
+    }
+
+    /**
+     * get id for FilterableTreeItem base on topology node
+     * @param topologyNode topology node
+     * @return id of filter tree item
+     */
+    public static String getId4FilterableTreeItem(TTNode<String> topologyNode) {
+        return topologyNode.getValue() != null ? topologyNode.getId() + "/" + topologyNode.getValue() : topologyNode.getId();
     }
 }

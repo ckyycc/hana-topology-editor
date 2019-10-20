@@ -81,7 +81,7 @@ public final class TopologyEditorController {
 
         snackbar = new JFXSnackbar(spMain);
         /*----------- Tree View Setting -----------*/
-        treeItemRootNode = new FilterableTreeItem<>(TreeUtils.TOPOLOGY_TREE_ROOT_NAME);//, rootIcon);
+        treeItemRootNode = new FilterableTreeItem<>(TreeUtils.TOPOLOGY_TREE_ROOT_NAME, TreeUtils.TOPOLOGY_TREE_ROOT_NAME);//, rootIcon);
 
         // bind filter
         treeItemRootNode.predicateProperty().bind(Bindings.createObjectBinding(() -> {
@@ -480,7 +480,8 @@ public final class TopologyEditorController {
 
         selectedNode.addChild(topologyNode);
 
-        FilterableTreeItem<String> subNode = new FilterableTreeItem<>(UIUtils.getTreeNodeValue4Display(topologyNode));
+        FilterableTreeItem<String> subNode = new FilterableTreeItem<>(
+                UIUtils.getTreeNodeValue4Display(topologyNode), UIUtils.getId4FilterableTreeItem(topologyNode));
         treeViewMap.put(subNode, topologyNode); //update map
 
         FilterableTreeItem<String> treeNode = (FilterableTreeItem<String>) tvTopology.getSelectionModel().getSelectedItem();
