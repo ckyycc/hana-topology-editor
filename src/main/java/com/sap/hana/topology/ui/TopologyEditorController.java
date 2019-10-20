@@ -88,7 +88,7 @@ public final class TopologyEditorController {
             if (CommonUtils.isNullOrEmpty(txtFilter.getText()))
                 return null;
             return TreeItemPredicate.create(actor ->
-                    actor.contains(txtFilter.getText()));
+                    actor.toLowerCase().contains(txtFilter.getText().toLowerCase().trim()));
         }, txtFilter.textProperty()));
 
         treeItemRootNode.setExpanded(true);
