@@ -80,5 +80,19 @@ public final class FilterableTreeItem<T> extends TreeItem<T> {
     public ObjectProperty<TreeItemPredicate<T>> predicateProperty() {
         return predicate;
     }
+
+    private void setId(T id) {
+        this.id = id;
+    }
+
+    public void update(T value, T id) {
+        // A little big ugly,
+        // set it to empty first, otherwise it won't trigger the update of tree cell if value is not changed
+        if (value != null && value.equals(this.getValue())) {
+            this.setValue(null);
+        }
+        this.setValue(value);
+        this.setId(id);
+    }
 }
 

@@ -521,12 +521,9 @@ public final class TopologyEditorController {
 
         //update treeView item
         FilterableTreeItem<String> treeNode = (FilterableTreeItem<String>) tvTopology.getSelectionModel().getSelectedItem();
-        if (name.equalsIgnoreCase(selectedNode.getName())) {
-            // a little big ugly...
-            // set it to empty first, otherwise it won't trigger the update of tree cell if name is not changed
-            treeNode.setValue("");
-        }
-        treeNode.setValue(UIUtils.getTreeNodeValue4Display(selectedNode));
+        //update value and id
+        treeNode.update(UIUtils.getTreeNodeValue4Display(selectedNode), UIUtils.getId4FilterableTreeItem(selectedNode));
+
         return true;
     }
 
