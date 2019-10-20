@@ -28,10 +28,7 @@
             <tooltip>
                <Tooltip text="Reload the tree, all changes will be lost!" />
             </tooltip></JFXButton>
-            <JFXTextField fx:id="txtFilter" prefHeight="23.0" prefWidth="170.0" promptText="Enter Search Term" styleClass="txt-filter">
-            <tooltip>
-               <Tooltip text="Input text for filtering." />
-            </tooltip></JFXTextField>
+            <JFXTextField fx:id="txtFilter" prefHeight="23.0" prefWidth="170.0" promptText="Enter Search Term" styleClass="txt-filter"/>
             <JFXButton fx:id="btnAbout" contentDisplay="GRAPHIC_ONLY" onAction="#onAbout" prefHeight="28.0" prefWidth="28.0" styleClass="btn-about">
             <tooltip>
                <Tooltip text="About the project." />
