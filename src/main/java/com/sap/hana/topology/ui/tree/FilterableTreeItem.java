@@ -12,11 +12,16 @@ import javafx.scene.control.TreeItem;
 import java.lang.reflect.Field;
 
 public final class FilterableTreeItem<T> extends TreeItem<T> {
-    final private ObservableList<TreeItem<T>> sourceList;
+    private ObservableList<TreeItem<T>> sourceList;
     private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
 
     private T id;
 
+    /**
+     * Constructor for FilterableTreeItem
+     * @param value value of the node
+     * @param id id (full path) of the node
+     */
     public FilterableTreeItem(T value, T id) {
         super(value);
         this.id = id;
@@ -41,8 +46,8 @@ public final class FilterableTreeItem<T> extends TreeItem<T> {
 
             // If it is filterable item, filter it with id,
             // which means when hitting parent node, all sub-nodes will be shown as well)
-            if (filterableChild != null && filterableChild.id != null) {
-                return predicate.get().test(this, filterableChild.id);
+            if (filterableChild != null && filterableChild.getId() != null) {
+                return predicate.get().test(this, filterableChild.getId());
             }
             // normal item return getValue instead
             return predicate.get().test(this, child.getValue());
@@ -65,6 +70,10 @@ public final class FilterableTreeItem<T> extends TreeItem<T> {
         }
     }
 
+    /**
+     * Get children
+     * @return the children of current node
+     */
     public ObservableList<TreeItem<T>> getInternalChildren() {
         return this.sourceList;
     }
@@ -84,7 +93,15 @@ public final class FilterableTreeItem<T> extends TreeItem<T> {
     private void setId(T id) {
         this.id = id;
     }
+    private T getId() {
+        return this.id;
+    }
 
+    /**
+     * Update value and id
+     * @param value value of the node
+     * @param id id (full path) of the node
+     */
     public void update(T value, T id) {
         // A little big ugly,
         // set it to empty first, otherwise it won't trigger the update of tree cell if value is not changed
@@ -92,6 +109,14 @@ public final class FilterableTreeItem<T> extends TreeItem<T> {
             this.setValue(null);
         }
         this.setValue(value);
+        this.setId(id);
+    }
+
+    /**
+     * Update id
+     * @param id id (full path) fo the node
+     */
+    public void update(T id) {
         this.setId(id);
     }
 }
