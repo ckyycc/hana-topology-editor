@@ -13,6 +13,7 @@ public final class TTNsutilExpProcessor implements TTProcessor<TTNode<String>, S
 
     /**
      * Get the string for exporting from topology tree
+     *
      * @param topologyNode topology tree
      * @return string of topology tree
      */
@@ -26,18 +27,17 @@ public final class TTNsutilExpProcessor implements TTProcessor<TTNode<String>, S
 
     /**
      * Generate string from the topology tree
+     *
      * @param topologyNode node of the tree
      * @return string of the topology tree
      */
     private String getStringFromTopologyTree(TTNode<String> topologyNode) {
         StringBuilder treeBuffer = new StringBuilder();
         treeBuffer.append(getStringFromTopologyNode(topologyNode));
-        if (topologyNode.getChildren() != null) {
-            for (TTNode<String> item : topologyNode.getChildren()) {
-                if (treeBuffer.length() > 0)
-                    treeBuffer.append("\n");
-                treeBuffer.append(getStringFromTopologyTree(item));
-            }
+        for (TTNode<String> item : topologyNode.getChildren()) {
+            if (treeBuffer.length() > 0)
+                treeBuffer.append("\n");
+            treeBuffer.append(getStringFromTopologyTree(item));
         }
 
         return treeBuffer.toString();
@@ -45,6 +45,7 @@ public final class TTNsutilExpProcessor implements TTProcessor<TTNode<String>, S
 
     /**
      * Get string from one topology tree node
+     *
      * @param topologyNode topology tree node
      * @return string of the provided topology tree node
      */
@@ -60,10 +61,11 @@ public final class TTNsutilExpProcessor implements TTProcessor<TTNode<String>, S
 
     /**
      * Get build id
+     *
      * @return build id
      */
     public String[] getProcessorId() {
-        return new String[] { TreeUtils.TOPOLOGY_TREE_EXPORTER_ID };
+        return new String[]{TreeUtils.TOPOLOGY_TREE_EXPORTER_ID};
     }
 
 }

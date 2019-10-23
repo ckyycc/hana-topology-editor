@@ -36,11 +36,12 @@ public final class UIUtils {
 
     /**
      * Build the tree for tree view
-     * @param treeNode treeNode of tree view
+     *
+     * @param treeNode     treeNode of tree view
      * @param topologyNode tree node from topology
-     * @param treeViewMap map between treeNode of tree view and treeNode of topology.
+     * @param treeViewMap  map between treeNode of tree view and treeNode of topology.
      */
-    public static void buildTree (FilterableTreeItem<String> treeNode, TTNode<String> topologyNode, Map<TreeItem<String>, TTNode<String>> treeViewMap) throws TTException {
+    public static void buildTree(FilterableTreeItem<String> treeNode, TTNode<String> topologyNode, Map<TreeItem<String>, TTNode<String>> treeViewMap) throws TTException {
         //tree view map should be never null
         if (treeViewMap == null) {
             throw new TTException("Internal error occurred! The tree map is empty.");
@@ -60,15 +61,15 @@ public final class UIUtils {
             }
 
             treeNode.getInternalChildren().add(subNode);
-            if (topologyNode.getChildren() != null && topologyNode.getChildren().size() > 0) {
-                for (TTNode<String> node : topologyNode.getChildren())
-                    buildTree(subNode, node, treeViewMap);
+            for (TTNode<String> node : topologyNode.getChildren()) {
+                buildTree(subNode, node, treeViewMap);
             }
         }
     }
 
     /**
      * Get the string value of one tree node
+     *
      * @param node tree node
      * @return the string value of the tree node
      */
@@ -78,8 +79,9 @@ public final class UIUtils {
 
     /**
      * Set text to status bar for NORMAL status
+     *
      * @param statusBar object for displaying the message
-     * @param text text that needs to be set
+     * @param text      text that needs to be set
      */
     public static void setStatusText(JFXSnackbar statusBar, String text) {
         setStatusText(statusBar, text, Status.NORMAL);
@@ -87,9 +89,10 @@ public final class UIUtils {
 
     /**
      * Set text to status bar
+     *
      * @param statusBar object for displaying the message
-     * @param text text that needs to be set
-     * @param status the status
+     * @param text      text that needs to be set
+     * @param status    the status
      */
     public static void setStatusText(JFXSnackbar statusBar, String text, Status status) {
         if (statusBar.isVisible()) {
@@ -147,10 +150,11 @@ public final class UIUtils {
 
     /**
      * General function for showing the dialog
+     *
      * @param resource FXML path
-     * @param pane dialog container
+     * @param pane     dialog container
      * @param consumer consumer for delivering message (via controller)
-     * @param <T> Controller
+     * @param <T>      Controller
      */
     public static <T> void showDialog(String resource, StackPane pane, Consumer<T> consumer) throws
             IOException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException,
@@ -160,11 +164,12 @@ public final class UIUtils {
 
     /**
      * General function for showing the dialog
-     * @param resource FXML path
-     * @param pane dialog container
-     * @param consumer consumer for delivering message (via controller)
+     *
+     * @param resource     FXML path
+     * @param pane         dialog container
+     * @param consumer     consumer for delivering message (via controller)
      * @param overlayClose Overlay Close flag, to prevent from being closed when click outside, set it to false
-     * @param <T> Controller
+     * @param <T>          Controller
      */
     public static <T> void showDialog(String resource, StackPane pane, Consumer<T> consumer, boolean overlayClose) throws
             IOException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException,
@@ -200,6 +205,7 @@ public final class UIUtils {
 
     /**
      * get id for FilterableTreeItem base on topology node
+     *
      * @param topologyNode topology node
      * @return id of filter tree item
      */

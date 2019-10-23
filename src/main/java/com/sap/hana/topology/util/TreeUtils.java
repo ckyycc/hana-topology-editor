@@ -29,7 +29,7 @@ public final class TreeUtils {
      * @return topology node
      */
     public static TTNode<String> getTopologyNodeFromParent(TTNode<String> parent, String name) {
-        if (parent != null && !CommonUtils.isNullOrEmpty(parent.getChildren()) && !CommonUtils.isNullOrEmpty(name)) {
+        if (parent != null && !CommonUtils.isNullOrEmpty(name)) {
             for (TTNode<String> node : parent.getChildren()) {
                 if (name.equalsIgnoreCase(node.getName())) {
                     return node;
