@@ -33,15 +33,12 @@ class TTNodeTest {
     }
 
     @Test
-    void setValue_ShouldDoNothingIfChildrenListIsNotEmpty() {
+    void setValue_ShouldThrowExceptionIfChildrenListIsNotEmpty() {
         TTNode<String> node = new TTNode<>("ID", "Name");
         TTNode<String> child = new TTNode<>("ID1", "Name1", "Value1");
         node.addChild(child);
 
-        String oldValue = node.getValue();
-        boolean oldLeafFlag = node.isLeaf();
-        node.setValue("TEST");
-        assertAll(() -> assertEquals(oldValue, node.getValue()), () -> assertEquals(oldLeafFlag, node.isLeaf()));
+        assertThrows(RuntimeException.class, () -> node.setValue("TEST"));
     }
 
     @Test

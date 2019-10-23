@@ -100,23 +100,21 @@ public final class FilterableTreeItem<T> extends TreeItem<T> {
     /**
      * Update value and id
      * @param value value of the node
-     * @param id id (full path) of the node
      */
-    public void update(T value, T id) {
+    public void update(T value) {
         // A little big ugly,
         // set it to empty first, otherwise it won't trigger the update of tree cell if value is not changed
         if (value != null && value.equals(this.getValue())) {
             this.setValue(null);
         }
         this.setValue(value);
-        this.setId(id);
     }
 
     /**
      * Update id
      * @param id id (full path) fo the node
      */
-    public void update(T id) {
+    public void updateId(T id) {
         this.setId(id);
     }
 }

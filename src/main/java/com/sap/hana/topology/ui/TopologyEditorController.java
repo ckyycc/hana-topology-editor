@@ -35,9 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class TopologyEditorController {
     @FXML
@@ -45,27 +43,27 @@ public final class TopologyEditorController {
     @FXML
     private VBox vbMain;
     @FXML
-    private JFXTextField txtFilter; 
+    private JFXTextField txtFilter;
     @FXML
     private JFXButton btnImport;
     @FXML
     private VBox vbTree;
     @FXML
-    private JFXButton btnExport; 
+    private JFXButton btnExport;
     @FXML
-    private JFXButton btnReload; 
+    private JFXButton btnReload;
     @FXML
-    private JFXButton btnAbout; 
+    private JFXButton btnAbout;
     @FXML
-    private JFXTreeView<String> tvTopology; 
+    private JFXTreeView<String> tvTopology;
     @FXML
-    private ContextMenu contextMenu; 
+    private ContextMenu contextMenu;
     @FXML
-    private MenuItem miAdd; 
+    private MenuItem miAdd;
     @FXML
-    private MenuItem miEdit; 
+    private MenuItem miEdit;
     @FXML
-    private MenuItem miDelete; 
+    private MenuItem miDelete;
 
     @FXML
     private void initialize() {
@@ -149,29 +147,28 @@ public final class TopologyEditorController {
 
     /**
      * Export the current topology to file
+     *
      * @param event export button click event
      */
     @FXML
     private void onExport(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+        fileChooser = new FileChooser();
 
         fileChooser.setTitle("Save file");
         fileChooser.setInitialFileName("exp_" + topologyFileName);
         if (lastFileFolder != null) {
             fileChooser.setInitialDirectory(lastFileFolder);
         }
+
         File savedFile = fileChooser.showSaveDialog(tvTopology.getScene().getWindow());
+
         if (savedFile != null) {
             // update last processed file path
             lastFileFolder = savedFile.getParentFile();
-
             try {
                 if (savedFile.exists() && !savedFile.delete()) {
                     showMsg("Failed to replace the file:" + savedFile.toString() + ", please check the access right.", Status.ERROR);
-                    event.consume();
-                    return;
-                }
-                if (savedFile.createNewFile()) {
+                } else if (savedFile.createNewFile()) {
                     //Use StreamWriter instead, to make sure the UTF8 charset
                     try (Writer writer = new OutputStreamWriter(new FileOutputStream(savedFile), StandardCharsets.UTF_8)) {
                         writer.write(getController().exportTopology(this.topologyRootNode));
@@ -179,34 +176,35 @@ public final class TopologyEditorController {
 //                    try (FileWriter writer = new FileWriter(savedFile)) {
 //                        writer.write(getController().exportTopology(this.topologyRootNode));
 //                    }
+                    showMsg("File saved: " + savedFile.toString(), Status.INFO);
                 } else {
                     showMsg("Failed to save the file:" + savedFile.toString() + ", please check the access right.", Status.ERROR);
-                    event.consume();
-                    return;
                 }
             } catch (IOException | TTException e) {
                 showMsg("An ERROR occurred while saving the file:" + savedFile.toString(), Status.ERROR);
-                event.consume();
-                return;
             }
-            showMsg("File saved: " + savedFile.toString(), Status.INFO);
         } else {
             showMsg("File export is cancelled", Status.INFO);
         }
+
+        //keep fileChooser null for checking whether fileChooser dialog is opening
+        fileChooser = null;
         event.consume();
     }
 
     /**
      * Import the topology from topology file
+     *
      * @param event import button click event
      */
     @FXML
     private void onImport(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+        fileChooser = new FileChooser();
         // set initial directory
         if (lastFileFolder != null) {
             fileChooser.setInitialDirectory(lastFileFolder);
         }
+
         File selectedFile = fileChooser.showOpenDialog(tvTopology.getScene().getWindow());
 
         if (selectedFile != null) {
@@ -216,11 +214,15 @@ public final class TopologyEditorController {
         } else {
             showMsg("File selection is cancelled", Status.INFO);
         }
+
+        //keep fileChooser null for checking whether fileChooser dialog is opening
+        fileChooser = null;
         event.consume();
     }
 
     /**
      * Reload the tree, resetting all the changes
+     *
      * @param event reload button click event
      * @throws TTException the exception when building the tree
      */
@@ -241,6 +243,7 @@ public final class TopologyEditorController {
 
     /**
      * Display about dialog
+     *
      * @param event about button click event
      */
     @FXML
@@ -261,6 +264,7 @@ public final class TopologyEditorController {
 
     /**
      * Add a new node
+     *
      * @param event add button click event
      */
     @FXML
@@ -278,6 +282,7 @@ public final class TopologyEditorController {
 
     /**
      * Delete current node
+     *
      * @param event delete button click event
      */
     @FXML
@@ -325,6 +330,7 @@ public final class TopologyEditorController {
 
     /**
      * Edit current node
+     *
      * @param event edit button click event
      */
     @FXML
@@ -344,10 +350,15 @@ public final class TopologyEditorController {
 
     /**
      * The drag is dropped, processing the dropped file
+     *
      * @param event drag event
      */
     @FXML
     private void OnDragDropped(DragEvent event) {
+        if (!checkForDragDropCondition()) {
+            event.consume();
+            return;
+        }
         Dragboard db = event.getDragboard();
         boolean success = false;
         if (db.hasFiles()) {
@@ -367,15 +378,32 @@ public final class TopologyEditorController {
 
     /**
      * Start dragging over, activating the drag css
+     *
      * @param event drag event
      */
     @FXML
     private void OnDragOver(DragEvent event) {
-        if (event.getDragboard().hasFiles()) {
-            event.acceptTransferModes(TransferMode.ANY);
+        if (!checkForDragDropCondition()) {
+            event.consume();
+            return;
         }
 
-        tvTopology.pseudoClassStateChanged(dragAreaPseudo, true);
+        if (event.getDragboard().hasFiles()) {
+            event.acceptTransferModes(TransferMode.LINK);
+            tvTopology.pseudoClassStateChanged(dragAreaPseudo, true);
+        }
+
+        event.consume();
+    }
+
+    /**
+     * Exit the drag, deactivating the drag css
+     *
+     * @param event drag event
+     */
+    @FXML
+    private void OnDragExited(DragEvent event) {
+        tvTopology.pseudoClassStateChanged(dragAreaPseudo, false);
         event.consume();
     }
 
@@ -426,24 +454,28 @@ public final class TopologyEditorController {
                         controller.setConsumer(m -> {
                             boolean result = true;
                             if (m != null) {
-                                boolean insert = Boolean.parseBoolean(m.get(NodeEditDialogController.INSERT_FLAG));
-                                String nameNew = m.get(NodeEditDialogController.TXT_NAME);
-                                String valueNew = m.get(NodeEditDialogController.TXT_VALUE);
-                                boolean leaf = Boolean.parseBoolean(m.get(NodeEditDialogController.TB_LEAF));
+                                try {
+                                    boolean insert = Boolean.parseBoolean(m.get(NodeEditDialogController.INSERT_FLAG));
+                                    String nameNew = m.get(NodeEditDialogController.TXT_NAME);
+                                    String valueNew = m.get(NodeEditDialogController.TXT_VALUE);
+                                    boolean leaf = Boolean.parseBoolean(m.get(NodeEditDialogController.TB_LEAF));
 
-                                String nameValueNew = leaf ? nameNew + TreeUtils.NAME_VALUE_DELIMITER + valueNew : nameNew;
-                                String nameValueOrg = leaf ? name + TreeUtils.NAME_VALUE_DELIMITER + value : name;
+                                    String nameValueNew = leaf ? nameNew + TreeUtils.NAME_VALUE_DELIMITER + valueNew : nameNew;
+                                    String nameValueOrg = leaf ? name + TreeUtils.NAME_VALUE_DELIMITER + value : name;
 
-                                if (insert) { //insert
-                                    result = insertNode(nameNew, valueNew, leaf);
-                                    if (result) {
-                                        showMsg("'" + nameValueNew + "' is added to " + path + ".", Status.SUCCESS);
+                                    if (insert) { //insert
+                                        result = insertNode(nameNew, valueNew, leaf);
+                                        if (result) {
+                                            showMsg("'" + nameValueNew + "' is added to " + path + ".", Status.SUCCESS);
+                                        }
+                                    } else { //update
+                                        result = updateCurrentNode(nameNew, valueNew, leaf);
+                                        if (result) {
+                                            showMsg("'" + nameValueOrg + "' is changed to '" + nameValueNew + "'.", Status.SUCCESS);
+                                        }
                                     }
-                                } else { //update
-                                    result = updateCurrentNode(nameNew, valueNew, leaf);
-                                    if (result) {
-                                        showMsg("'" + nameValueOrg + "' is changed to '" + nameValueNew + "'.", Status.SUCCESS);
-                                    }
+                                } catch (Exception e) {
+                                    showMsg("Error occurred: " + e.getMessage(), Status.ERROR);
                                 }
                             }
                             if (result) {
@@ -462,8 +494,9 @@ public final class TopologyEditorController {
 
     /**
      * Insert the node to current topology tree view if the node is not duplicated, and update tree view map afterwards.
-     * @param name tree node name
-     * @param value tree node value
+     *
+     * @param name   tree node name
+     * @param value  tree node value
      * @param isLeaf whether the node is a leaf
      * @return result for the inserting
      */
@@ -492,7 +525,8 @@ public final class TopologyEditorController {
 
     /**
      * Update the node from current topology tree view if the new name is not duplicated, and update tree view map afterwards.
-     * @param name the new name of the node
+     *
+     * @param name  the new name of the node
      * @param value the new value of the node
      * @return result of updating
      */
@@ -513,7 +547,6 @@ public final class TopologyEditorController {
                 showMsg("Can't set value to a node which contains subNode", Status.WARN);
             }
         } else {
-            selectedNode.setValue(null);
             selectedNode.setLeaf(false);
             //current selected node is now not leaf
             isCurrentNodeLeaf.set(false);
@@ -521,8 +554,21 @@ public final class TopologyEditorController {
 
         //update treeView item
         FilterableTreeItem<String> treeNode = (FilterableTreeItem<String>) tvTopology.getSelectionModel().getSelectedItem();
-        //update value and id
-        treeNode.update(UIUtils.getTreeNodeValue4Display(selectedNode), UIUtils.getId4FilterableTreeItem(selectedNode));
+        //update value
+        treeNode.update(UIUtils.getTreeNodeValue4Display(selectedNode));
+
+        //update id for the selected node and all the sub-nodes recursively.
+        Deque<FilterableTreeItem<String>> queue = new ArrayDeque<>();
+        queue.offer(treeNode);
+        while (!queue.isEmpty()) {
+            FilterableTreeItem<String> node = queue.poll();
+            node.updateId(UIUtils.getId4FilterableTreeItem(treeViewMap.get(node)));
+            for (TreeItem<String> n : node.getInternalChildren()) {
+                if (n instanceof FilterableTreeItem && treeViewMap.containsKey(n)) {
+                    queue.offer((FilterableTreeItem<String>)n);
+                }
+            }
+        }
 
         return true;
     }
@@ -567,12 +613,22 @@ public final class TopologyEditorController {
 
     /**
      * Check the condition for displaying the node edit dialog.
+     *
      * @return checking result
      */
     private boolean checkForDisplayingEditDialog() {
         // This is for fixing the bug: shortcut can keep opening all dialogs.
         // return false if some dialog was already opened or no node is selected.
-        return !(DialogController.isDialogOpened().get() || selectedNode == null);
+        return !DialogController.isDialogOpened().get() && selectedNode != null;
+    }
+
+    /**
+     * Check the condition for enabling the drag and drop
+     *
+     * @return checking result
+     */
+    private boolean checkForDragDropCondition() {
+        return !DialogController.isDialogOpened().get() && fileChooser == null;
     }
 
     /**
@@ -584,7 +640,8 @@ public final class TopologyEditorController {
 
     /**
      * Display the message on message bar
-     * @param msg message to be displayed
+     *
+     * @param msg    message to be displayed
      * @param status message status
      */
     private void showMsg(String msg, Status status) {
@@ -593,6 +650,7 @@ public final class TopologyEditorController {
 
     /**
      * Get topology tree controller
+     *
      * @return topology tree controller
      * @throws TTException exception during the initialization of the controller
      */
@@ -613,4 +671,5 @@ public final class TopologyEditorController {
     private JFXTreeViewPath treeViewPath;
     private PseudoClass dragAreaPseudo;
     private JFXSnackbar snackbar;
+    private FileChooser fileChooser;
 }
