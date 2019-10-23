@@ -48,7 +48,7 @@ public final class FileUtils {
             return null;
         }
 
-        String[] tops = topologyStr.split("\n");
+        String[] tops = topologyStr.split("[\r\n]+");
 
         if (tops.length == 0) {
             return null;
