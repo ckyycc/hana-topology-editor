@@ -5,70 +5,77 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.sap.hana.topology.tree.TTNode;
 import com.sap.hana.topology.util.FileUtils;
-
 import java.util.Map;
 
-/**
- * Processor for importing name server JSON topology file
- */
+/** Processor for importing name server JSON topology file */
 @Processor(processorType = ProcessorType.IMPORT)
 public final class TTJsonImpProcessor implements TTProcessor<String, TTNode<String>> {
 
-    /**
-     * Load topology tree from json string
-     * @param topologyStr the json string of topology tree
-     * @return topology tree root node
-     */
-    @Override
-    public TTNode<String> process(String topologyStr) throws TTProcessException {
-        final String ROOT_STRING = "topology"; //Should not use TopologyTreeUtils.TOPOLOGY_TREE_ROOT_NAME, because this just happens to be the same value.
+  /** Id for the processor, it's hardcoded base on the first line of the related file */
+  private final String[] processorId = {FileUtils.JSON_TOPOLOGY_START_STRING};
 
-        Map<String, Object> topologyMap;
-        try {
-            topologyMap = new Gson().fromJson(topologyStr, new TypeToken<Map<String, Object>>(){}.getType());
-        } catch (JsonSyntaxException e) {
-            throw new TTProcessException("File format is not supported, JSON parse error!");
-        }
+  /**
+   * Load topology tree from json string
+   *
+   * @param topologyStr the json string of topology tree
+   * @return topology tree root node
+   */
+  @Override
+  public TTNode<String> process(String topologyStr) throws TTProcessException {
+    // this is the root name in topology json file,
+    // Should not use TopologyTreeUtils.TOPOLOGY_TREE_ROOT_NAME, because this just happens to be the
+    // same value.
+    final String ROOT_STRING = "topology";
 
-        if (topologyMap == null || !topologyMap.containsKey(ROOT_STRING)) {
-            throw new TTProcessException("File format is not supported!");
-        }
-
-        TTNode<String> root = new TTNode<>(ROOT_STRING);
-        return buildTopologyTree(topologyMap.get(ROOT_STRING), root);
+    Map<String, Object> topologyMap;
+    try {
+      topologyMap =
+          new Gson().fromJson(topologyStr, new TypeToken<Map<String, Object>>() {}.getType());
+    } catch (JsonSyntaxException e) {
+      throw new TTProcessException("File format is not supported, JSON parse error!");
     }
 
-    /**
-     * Build Topology Tree base on Gson LinkedTreeMap
-     * @param obj Gson LinkedTreeMap node (for a non-leaf node) or String/Long value (for a leaf node)
-     * @param node Current Tree Node
-     * @return Tree Node
-     */
-    @SuppressWarnings("unchecked")
-    private TTNode<String> buildTopologyTree(Object obj, TTNode<String> node) {
-        if (obj instanceof Map) {
-            Map<String, Object> mapItem = (Map<String, Object>)obj;
-            for (String key : mapItem.keySet()) {
-                node.addChild(buildTopologyTree(mapItem.get(key), new TTNode<>(node, key)));
-            }
-        } else {
-            if (obj instanceof Double) {
-                //Gson uses "double" for those "long" numbers, change it bak because we do not have "double" in JSON file
-                node.setValue(String.valueOf(((Double) obj).longValue()));
-            } else {
-                node.setValue(String.valueOf(obj));
-            }
-        }
-        return node;
+    if (topologyMap == null || !topologyMap.containsKey(ROOT_STRING)) {
+      throw new TTProcessException("File format is not supported!");
     }
 
-    /**
-     * Get build id
-     * @return build id
-     */
-    @Override
-    public String[] getProcessorId() {
-        return new String[] { FileUtils.JSON_TOPOLOGY_START_STRING };
-    }
+    TTNode<String> root = new TTNode<>(ROOT_STRING);
+    return buildTopologyTree(topologyMap.get(ROOT_STRING), root);
+  }
 
+  /**
+   * Build Topology Tree base on Gson LinkedTreeMap
+   *
+   * @param obj Gson LinkedTreeMap node (for a non-leaf node) or String/Long value (for a leaf node)
+   * @param node Current Tree Node
+   * @return Tree Node
+   */
+  @SuppressWarnings("unchecked")
+  private TTNode<String> buildTopologyTree(Object obj, TTNode<String> node) {
+    if (obj instanceof Map) {
+      Map<String, Object> mapItem = (Map<String, Object>) obj;
+      for (String key : mapItem.keySet()) {
+        node.addChild(buildTopologyTree(mapItem.get(key), new TTNode<>(node, key)));
+      }
+    } else {
+      if (obj instanceof Double) {
+        // Gson uses "double" for those "long" numbers, change it bak because we do not have
+        // "double" in JSON file
+        node.setValue(String.valueOf(((Double) obj).longValue()));
+      } else {
+        node.setValue(String.valueOf(obj));
+      }
+    }
+    return node;
+  }
+
+  /**
+   * Get processor id
+   *
+   * @return processor id
+   */
+  @Override
+  public String[] getProcessorId() {
+    return processorId.clone();
+  }
 }

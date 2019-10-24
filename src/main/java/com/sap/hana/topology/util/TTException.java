@@ -1,19 +1,19 @@
 package com.sap.hana.topology.util;
 
 public class TTException extends Exception {
-    public TTException() {
-        super();
-    }
+  public TTException() {
+    super();
+  }
 
-    public TTException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public TTException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public TTException(String message) {
-        super(message);
-    }
+  public TTException(String message) {
+    super(message);
+  }
 
-    public TTException(Throwable cause) {
-        super(cause);
-    }
+  public TTException(Throwable cause) {
+    super(cause);
+  }
 }

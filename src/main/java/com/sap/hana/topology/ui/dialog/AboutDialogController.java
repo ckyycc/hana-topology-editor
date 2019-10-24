@@ -13,38 +13,36 @@ import javafx.stage.Stage;
 
 public final class AboutDialogController extends DialogController<ButtonType> {
 
-    @FXML
-    private JFXButton btnOK;
+  @FXML private JFXButton btnOK;
 
-    @FXML
-    private void onKeyPressed(KeyEvent event) {
-        if (KeyCode.ESCAPE == event.getCode()) {
-            onOK(new ActionEvent(event.getSource(), event.getTarget()));
-        }
+  @FXML
+  private void onKeyPressed(KeyEvent event) {
+    if (KeyCode.ESCAPE == event.getCode()) {
+      onOK(new ActionEvent(event.getSource(), event.getTarget()));
     }
+  }
 
-    @FXML
-    private void onOK(ActionEvent event) {
-        accept(ButtonType.OK);
-        event.consume();
-    }
+  @FXML
+  private void onOK(ActionEvent event) {
+    accept(ButtonType.OK);
+    event.consume();
+  }
 
-    @FXML
-    private void onClick(MouseEvent event) {
-        HostServices hostServices = (HostServices)this.getStage().getProperties().get(UIUtils.HOST_SERVICES);
-        hostServices.showDocument("https://github.com/ckyycc/hana-topology-editor");
-        event.consume();
-    }
+  @FXML
+  private void onClick(MouseEvent event) {
+    HostServices hostServices =
+        (HostServices) this.getStage().getProperties().get(UIUtils.HOST_SERVICES);
+    hostServices.showDocument("https://github.com/ckyycc/hana-topology-editor");
+    event.consume();
+  }
 
-    /**
-     * Set focus to OK Button by default
-     */
-    @Override
-    public void setDefaultFocus() {
-        btnOK.requestFocus();
-    }
+  /** Set focus to OK Button by default */
+  @Override
+  public void setDefaultFocus() {
+    btnOK.requestFocus();
+  }
 
-    private Stage getStage() {
-        return (Stage) btnOK.getScene().getWindow();
-    }
+  private Stage getStage() {
+    return (Stage) btnOK.getScene().getWindow();
+  }
 }
