@@ -20,7 +20,6 @@ import com.sap.hana.topology.util.Status;
 import com.sap.hana.topology.util.TTException;
 import com.sap.hana.topology.util.TreeUtils;
 import com.sap.hana.topology.util.UIUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,7 +34,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
