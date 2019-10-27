@@ -144,7 +144,7 @@ public final class TTNode<T> {
   }
 
   /**
-   * Set leaf property for the node
+   * Set leaf property for the node, for non-leaf node, the value will be set to null
    *
    * @param leaf leaf flag
    */
@@ -153,8 +153,8 @@ public final class TTNode<T> {
       throw new RuntimeException("Can not change a node to leaf when it contains sub-nodes!");
     }
 
-    if (!leaf && this.getValue() != null) {
-      throw new RuntimeException("Can not set a node to a non-leaf node when it has value!");
+    if (!leaf) {
+      this.value = null;
     }
     this.isLeaf = leaf;
   }
