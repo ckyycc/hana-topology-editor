@@ -46,8 +46,9 @@ public final class TTJsonImpProcessor implements TTProcessor<String, TTNode<Stri
                       (json, typeOfT, context) -> (Map<String, Object>) read(json))
               .create()
               .fromJson(topologyStr, tokenType);
-
-    } catch (JsonSyntaxException e) {
+    } catch (Exception e) {
+      // Except JsonSyntaxException, some other runtime exceptions will be thrown
+      // if the provided file format is not correct, like class ClassCastException
       throw new TTProcessException("File format is not supported, JSON parse error!");
     }
 
