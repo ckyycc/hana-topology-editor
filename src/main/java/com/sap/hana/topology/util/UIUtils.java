@@ -127,15 +127,15 @@ public final class UIUtils {
           break;
         case WARN:
           sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, false);
-          sbPane.pseudoClassStateChanged(WARN_PSEUDO, true);
           sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
+          sbPane.pseudoClassStateChanged(WARN_PSEUDO, true);
           sbPane.pseudoClassStateChanged(ERROR_PSEUDO, false);
           break;
         case ERROR:
           sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, false);
-          sbPane.pseudoClassStateChanged(ERROR_PSEUDO, true);
-          sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
           sbPane.pseudoClassStateChanged(INFO_PSEUDO, false);
+          sbPane.pseudoClassStateChanged(WARN_PSEUDO, false);
+          sbPane.pseudoClassStateChanged(ERROR_PSEUDO, true);
           break;
         default:
           sbPane.pseudoClassStateChanged(SUCCESS_PSEUDO, false);
