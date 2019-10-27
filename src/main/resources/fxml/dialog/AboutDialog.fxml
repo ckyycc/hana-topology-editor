@@ -24,7 +24,7 @@
          </tooltip>
       </Hyperlink>
         <Label layoutX="35.0" layoutY="68.0" prefHeight="27.0" prefWidth="224.0" styleClass="lb-about-version" text="HANA Topology Editor 1.00.00" />
-        <Label layoutX="35.0" layoutY="92.0" styleClass="lb-about-build" text="Built on October 25, 2019" />
+        <Label layoutX="35.0" layoutY="92.0" styleClass="lb-about-build" text="Built on October 26, 2019" />
         <Label layoutX="35.0" layoutY="136.0" styleClass="lb-about-author" text="Kuang Cheng" />
         <effect>
             <DropShadow blurType="GAUSSIAN" />
