@@ -95,6 +95,17 @@
     -fx-background-color: -fx-button-hover-light;
 }
 
+/* button - clear the filter text */
+.btn-clear-filter {
+    -fx-font-size: 11px;
+    -fx-background-color: -fx-tv-background;
+}
+
+.btn-clear-filter: hover {
+    -fx-cursor: hand;
+    -fx-background-color: -fx-button-hover-light;
+}
+
 /* input text - filter */
 .txt-filter {
     -fx-font-size: 11px;

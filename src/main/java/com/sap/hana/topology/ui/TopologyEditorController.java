@@ -85,6 +85,7 @@ public final class TopologyEditorController {
   @FXML private MenuItem miAdd;
   @FXML private MenuItem miEdit;
   @FXML private MenuItem miDelete;
+  @FXML private JFXButton btnClearFilter;
 
   @FXML
   private void initialize() {
@@ -166,6 +167,8 @@ public final class TopologyEditorController {
     btnReload.disableProperty().bind(isCurrentTreeNotLoaded);
     // disable filter when tree is empty
     txtFilter.disableProperty().bind(isCurrentTreeNotLoaded);
+    // hide clear button when filter is empty
+    btnClearFilter.visibleProperty().bind(txtFilter.textProperty().isNotEmpty());
 
     /*------------focus bindings-------------*/
     btnExport.focusTraversableProperty().bind(AboutDialogController.isDialogOpened().not());
@@ -461,6 +464,16 @@ public final class TopologyEditorController {
     event.consume();
   }
 
+  /**
+   * clear the filter text input box
+   * @param event mouse click event
+   */
+  @FXML
+  void onClearFilter(MouseEvent event) {
+    txtFilter.setText("");
+    event.consume();
+  }
+
   /** load topology from file */
   private void loadTopologyFromFile(String fullPath, String fileName) {
     String topologyStrBak = topologyStr;
@@ -622,6 +635,7 @@ public final class TopologyEditorController {
         showMsg("Can't set value to a node which contains subNode", Status.WARN);
       }
     } else {
+      //set the node to a non-leaf node, value will be set to null
       selectedNode.setLeaf(false);
       // current selected node is now not leaf
       isCurrentNodeLeaf.set(false);
